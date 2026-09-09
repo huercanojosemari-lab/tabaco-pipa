@@ -1,12 +1,23 @@
 {
-  "version": "0.1.0",
-  "updated": "2026-09-09",
-  "scope": "Tabacos de pipa comercializados o documentados para mercados europeos; la disponibilidad se verificará por país.",
-  "fields": ["marca","nombre","fabricante","origen","mercados_europeos","estado","tipo","composicion","corte","aromatizacion","fuerza","aroma","sabor","combustion","equilibrio","valoracion_comunidad","numero_resenas","resumen_editorial","fuentes","imagen_local"],
-  "sources": [
-    {"name":"TobaccoReviews","url":"https://www.tobaccoreviews.com/","purpose":"Catálogo y reseñas de mezclas; se usará para datos y síntesis, no para copiar reseñas literalmente."},
+  "version":"0.2.0",
+  "updated":"2026-09-09",
+  "scope":"Catálogo europeo en construcción. La disponibilidad se verificará por país y fecha.",
+  "fields":["marca","nombre","fabricante","origen","mercados_europeos","estado","tipo","composicion","corte","aromatizacion","fuerza","aroma","sabor","combustion","equilibrio","valoracion_comunidad","numero_resenas","resumen_editorial","fuentes","imagen_local"],
+  "sources":[
+    {"name":"TobaccoReviews","url":"https://www.tobaccoreviews.com/","purpose":"Catálogo, metadatos y reseñas; Pipateka elaborará síntesis propias."},
     {"name":"Comisión Europea - Normativa de productos del tabaco","url":"https://health.ec.europa.eu/tobacco/product-regulation_es","purpose":"Marco regulatorio europeo."},
-    {"name":"Comisión Europea - EU-CEG","url":"https://health.ec.europa.eu/eu-common-entry-gate-eu-ceg/providing-information-tobacco-products-e-cigarettes-and-refill-containers_es","purpose":"Referencia sobre notificación de productos a los Estados miembros."}
+    {"name":"Comisión Europea - EU-CEG","url":"https://health.ec.europa.eu/eu-common-entry-gate-eu-ceg/providing-information-tobacco-products-e-cigarettes-and-refill-containers_es","purpose":"Marco de notificación de productos a los Estados miembros."}
   ],
-  "products": []
+  "products":[
+    {"marca":"Mac Baren","nombre":"Mixture: Scottish Blend","tipo":"Scottish","composicion":["Virginia","Burley","Cavendish"],"estado":"documentado; disponibilidad por país pendiente","corte":"Loose Cut / mezcla de cortes","fuerza":"Mild to Medium","aromatizacion":"Mild to Medium","numero_resenas":413,"resumen_editorial":"Mezcla compleja y versátil; las reseñas destacan dulzor moderado, notas tostadas/especiadas y combustión generalmente sencilla.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/english.svg"},
+    {"marca":"Peterson","nombre":"Sweet Killarney","tipo":"Aromatic","estado":"documentado; disponibilidad por país pendiente","resumen_editorial":"Ficha incorporada al catálogo para investigación técnica y contraste de mercados europeos.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/burley.svg"},
+    {"marca":"Scandinavian Tobacco Group","nombre":"Erinmore Flake","tipo":"Aromatic","composicion":["Virginia"],"estado":"documentado; disponibilidad por país pendiente","corte":"Flake","resumen_editorial":"Mezcla tradicional en formato flake; composición, intensidad y mercados se completarán mediante verificación de fuentes.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/virginia.svg"},
+    {"marca":"Gawith, Hoggarth & Co.","nombre":"Coniston Cut Plug","tipo":"Virginia Based","composicion":["Virginia"],"estado":"documentado; disponibilidad por país pendiente","corte":"Cut Plug","resumen_editorial":"Mezcla en formato cut plug incorporada para ampliar la sección de cortes tradicionales.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/virginia.svg"},
+    {"marca":"Davidoff","nombre":"Blue Mixture","tipo":"pendiente de clasificación","estado":"reseñado recientemente; ficha técnica pendiente","resumen_editorial":"Producto activo en la conversación de la comunidad; se completará su ficha sin inferir datos no verificados.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/hero.svg"},
+    {"marca":"Robert McConnell","nombre":"Red Virginia","tipo":"Straight Virginia","composicion":["Virginia"],"estado":"reseñado; disponibilidad por país pendiente","resumen_editorial":"Virginia de referencia para la sección de mezclas centradas en hoja natural.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/virginia.svg"},
+    {"marca":"Robert McConnell","nombre":"Original Oriental","tipo":"Oriental","composicion":["Oriental/Turkish"],"estado":"reseñado; disponibilidad por país pendiente","resumen_editorial":"Mezcla centrada en hoja oriental; se completarán corte, fuerza y perfil sensorial con fuentes verificables.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/balkan.svg"},
+    {"marca":"G. L. Pease","nombre":"Gaslight","tipo":"English","composicion":["Latakia","Oriental/Turkish","Virginia"],"estado":"reseñado; disponibilidad por país pendiente","aromatizacion":"None Detected","resumen_editorial":"Perfil inglés/no aromático incorporado a la sección de Latakia y orientales.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/english.svg"},
+    {"marca":"G. L. Pease","nombre":"Bankside","tipo":"English","composicion":["Latakia","Oriental/Turkish","Virginia"],"estado":"reseñado; disponibilidad por país pendiente","aromatizacion":"None Detected","resumen_editorial":"Mezcla inglesa documentada entre las reseñas recientes; ficha detallada pendiente.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/english.svg"},
+    {"marca":"Cornell & Diehl","nombre":"Bayou Morning Flake","tipo":"Virginia/Perique","composicion":["Virginia","Perique"],"estado":"reseñado; disponibilidad por país pendiente","corte":"Flake","aromatizacion":"None Detected","resumen_editorial":"Virginia/Perique en formato flake; se investigará presencia real por mercado europeo.","fuentes":["TobaccoReviews"],"imagen_local":"assets/images/virginia.svg"}
+  ]
 }
