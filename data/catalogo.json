@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "updated": "2026-09-09",
+  "scope": "Tabacos de pipa comercializados o documentados para mercados europeos; la disponibilidad se verificará por país.",
+  "fields": ["marca","nombre","fabricante","origen","mercados_europeos","estado","tipo","composicion","corte","aromatizacion","fuerza","aroma","sabor","combustion","equilibrio","valoracion_comunidad","numero_resenas","resumen_editorial","fuentes","imagen_local"],
+  "sources": [
+    {"name":"TobaccoReviews","url":"https://www.tobaccoreviews.com/","purpose":"Catálogo y reseñas de mezclas; se usará para datos y síntesis, no para copiar reseñas literalmente."},
+    {"name":"Comisión Europea - Normativa de productos del tabaco","url":"https://health.ec.europa.eu/tobacco/product-regulation_es","purpose":"Marco regulatorio europeo."},
+    {"name":"Comisión Europea - EU-CEG","url":"https://health.ec.europa.eu/eu-common-entry-gate-eu-ceg/providing-information-tobacco-products-e-cigarettes-and-refill-containers_es","purpose":"Referencia sobre notificación de productos a los Estados miembros."}
+  ],
+  "products": []
+}
