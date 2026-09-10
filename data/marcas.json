@@ -1,0 +1,30 @@
+{
+  "version":"1.0.0",
+  "updated":"2026-09-10",
+  "source":"TobaccoReviews",
+  "source_scope":"Índice mundial de marcas y blends; los recuentos reflejan el índice consultado y deben verificarse antes de afirmar disponibilidad actual.",
+  "total_marcas_referencia":667,
+  "total_blends_referencia":8581,
+  "marcas":[
+    {"marca":"1776 Tobacco Co","blends":10,"resenas":46},
+    {"marca":"1839","blends":1,"resenas":0},
+    {"marca":"2 Guys Smoke Shop","blends":4,"resenas":2},
+    {"marca":"310 Pipe & Tobacco","blends":3,"resenas":4},
+    {"marca":"4 Aces","blends":4,"resenas":8},
+    {"marca":"4noggins","blends":33,"resenas":594},
+    {"marca":"4th Generation","blends":5,"resenas":2},
+    {"marca":"5ive Kings","blends":3,"resenas":1},
+    {"marca":"5th Avenue Cigars","blends":2,"resenas":1},
+    {"marca":"7-20-4","blends":5,"resenas":7},
+    {"marca":"752","blends":4,"resenas":1},
+    {"marca":"A & C Petersen","blends":13,"resenas":123},
+    {"marca":"Abenaki Tobacco Co.","blends":21,"resenas":49},
+    {"marca":"Admiral's Choice","blends":5,"resenas":69},
+    {"marca":"Affordable Pipes","blends":21,"resenas":87},
+    {"marca":"Alfie Turmeaus","blends":22,"resenas":26},
+    {"marca":"Alois Dallmayr","blends":3,"resenas":2},
+    {"marca":"Alsbo","blends":7,"resenas":135},
+    {"marca":"Alt Smokers Pipes","blends":1,"resenas":2},
+    {"marca":"Alte Tabakstube","blends":1,"resenas":1}
+  ]
+}
