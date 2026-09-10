@@ -12,9 +12,16 @@
   <div class="nav wrap">
     <a class="brand" href="#inicio" aria-label="Pipateka, inicio"><span class="pipe-mark">◖</span><span><strong>PIPATEKA</strong><small>ENCICLOPEDIA DEL TABACO DE PIPA</small></span></a>
     <nav class="nav-links" aria-label="Navegación principal">
-      <a class="active" href="#inicio">Inicio</a><a href="#catalogo">Catálogo</a><a href="#marcas">Marcas</a><a href="#tipos">Tipos</a><a href="#paises">Países</a><a href="#destacados">Mejor valorados</a><a href="#resenas">Más reseñados</a><a href="#guia">Guía</a>
+      <a class="active" href="#inicio">Inicio</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#marcas">Marcas</a>
+      <a href="#tipos">Tipos</a>
+      <a href="#paises">Países</a>
+      <a href="#destacados">Mejor valorados</a>
+      <a href="#resenas">Más reseñados</a>
+      <a href="#guia">Guía</a>
     </nav>
-    <div class="nav-tools"><button aria-label="Buscar">⌕</button><button aria-label="Cuenta">♙</button><span>18+</span></div>
+    <div class="nav-tools"><button type="button" id="focusSearch" aria-label="Buscar">⌕</button><button type="button" aria-label="Cuenta">♙</button><span>18+</span></div>
   </div>
 </header>
 
@@ -27,7 +34,7 @@
       <p>Descubre, explora y encuentra tu mezcla ideal. Pipateka reúne fichas, perfiles y reseñas de mezclas de tabaco de pipa.</p>
     </div>
     <div class="search-panel">
-      <label class="search-main"><span>⌕</span><input id="search" type="search" placeholder="Buscar tabaco, marca o mezcla…" aria-label="Buscar en el catálogo"><button id="searchButton">Buscar</button></label>
+      <label class="search-main"><span>⌕</span><input id="search" type="search" placeholder="Buscar tabaco, marca o mezcla…" aria-label="Buscar en el catálogo"><button type="button" id="searchButton">Buscar</button></label>
       <select id="typeSelect" aria-label="Tipo"><option value="Todos">Tipos</option></select>
       <select id="brandSelect" aria-label="Marca"><option value="Todas">Marca</option></select>
       <select id="strengthSelect" aria-label="Fuerza"><option value="Todas">Fuerza</option></select>
@@ -38,17 +45,30 @@
 </section>
 
 <section class="trust-strip">
-  <div class="wrap trust-grid"><div>▣ <p><b>Más de 2.000 tabacos</b><small>de las mejores marcas</small></p></div><div>☆ <p><b>Valoraciones reales</b><small>de la comunidad de fumadores</small></p></div><div>♢ <p><b>Información verificada</b><small>y actualizada</small></p></div><div>◎ <p><b>Disponibilidad en Europa</b><small>por país y mercado</small></p></div><div>◒ <p><b>Guía y recursos</b><small>para disfrutar del tabaco de pipa</small></p></div></div>
+  <div class="wrap trust-grid"><div>▣ <p><b>Catálogo en construcción</b><small>datos ampliados progresivamente</small></p></div><div>☆ <p><b>Valoraciones comunitarias</b><small>cuando existen datos registrados</small></p></div><div>♢ <p><b>Información diferenciada</b><small>documentado o pendiente</small></p></div><div>◎ <p><b>Disponibilidad europea</b><small>por país y mercado</small></p></div><div>◒ <p><b>Guía Pipateka</b><small>proyecto informativo 18+</small></p></div></div>
 </section>
 
 <section id="catalogo" class="catalog-section wrap">
-  <div class="section-title"><h2>Tabacos destacados <i></i></h2><a href="#resenas">Ver todos los tabacos →</a></div>
+  <div id="destacados" class="section-title"><h2>Tabacos destacados <i></i></h2><a href="#resenas">Ver todos los tabacos →</a></div>
   <div class="featured-grid" id="featuredCards" aria-live="polite"></div>
 </section>
 
 <section class="explore wrap">
-  <div id="tipos" class="explore-types"><div class="section-title"><h2>Explora por tipo <i></i></h2></div><div class="type-tiles"><a href="#catalogo">Virginia <b>→</b></a><a href="#catalogo">Virginia/Perique <b>→</b></a><a href="#catalogo">Virginia/Burley <b>→</b></a><a href="#catalogo">English <b>→</b></a><a href="#catalogo">Balkan <b>→</b></a><a href="#catalogo">Aromáticos <b>→</b></a></div></div>
+  <div id="tipos" class="explore-types"><div class="section-title"><h2>Explora por tipo <i></i></h2></div><div class="type-tiles">
+    <a href="#resenas" data-category="Virginia">Virginia <b>→</b></a>
+    <a href="#resenas" data-category="Virginia/Perique">Virginia/Perique <b>→</b></a>
+    <a href="#resenas" data-category="Virginia/Burley">Virginia/Burley <b>→</b></a>
+    <a href="#resenas" data-category="English">English <b>→</b></a>
+    <a href="#resenas" data-category="Balkan">Balkan <b>→</b></a>
+    <a href="#resenas" data-category="Aromáticos">Aromáticos <b>→</b></a>
+  </div></div>
   <div id="marcas" class="brands"><div class="section-title"><h2>Marcas populares <i></i></h2><a href="#catalogo">Ver todas →</a></div><div class="brand-row"><span>Peterson</span><span>Mac Baren</span><span>Samuel Gawith</span><span>Cornell &amp; Diehl</span><span>W. O. Larsen</span><span>Escudo</span></div></div>
+</section>
+
+<section id="paises" class="catalog-section wrap country-section">
+  <div class="section-title"><h2>Disponibilidad por países <i></i></h2></div>
+  <p class="muted">La disponibilidad europea se comprobará progresivamente por país y fecha. Una ficha no se marca como disponible en un mercado si no existe verificación suficiente.</p>
+  <div class="country-list"><span>España</span><span>Francia</span><span>Alemania</span><span>Italia</span><span>Portugal</span><span>Países Bajos</span><span>Bélgica</span><span>Reino Unido</span></div>
 </section>
 
 <section id="resenas" class="catalog-section wrap all-results">
@@ -61,5 +81,6 @@
 
 <footer><div class="wrap footer-row"><div class="footer-brand">◖ <b>PIPATEKA</b><small>ENCICLOPEDIA DEL TABACO DE PIPA</small></div><div>Aviso legal　·　Privacidad　·　Contacto　·　Sobre Pipateka</div><div>El tabaco es perjudicial para la salud. Contiene nicotina y es adictivo.　<span>18+</span></div></div></footer>
 <script src="app.js"></script>
+<script>document.querySelector('#focusSearch')?.addEventListener('click',()=>{document.querySelector('#search')?.focus();document.querySelector('#catalogo')?.scrollIntoView({behavior:'smooth'});});</script>
 </body>
 </html>
