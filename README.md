@@ -8,7 +8,6 @@ Enciclopedia informativa en español sobre tabacos de pipa.
 - Búsqueda por marca, nombre, tipo y composición.
 - Filtros por familia de mezcla.
 - Fichas individuales en `producto.html`.
-- Ilustraciones SVG propias almacenadas en `assets/images/`.
 - Campos de trazabilidad para distinguir datos documentados de datos pendientes.
 - Aviso 18+ y enfoque no comercial.
 
@@ -24,4 +23,4 @@ Sitio estático preparado para GitHub Pages. No necesita servidor ni base de dat
 
 ## Estado
 
-La arquitectura está preparada para ampliar el catálogo, añadir países, fuentes, cambios de estado y nuevas familias de mezclas sin rehacer la interfaz.
+Se ha restaurado el formato anterior de la interfaz y se han retirado temporalmente todas las imágenes para preparar un nuevo sistema visual desde cero.
