@@ -7,6 +7,7 @@ const strengthSelect=document.querySelector('#strengthSelect');
 const aromaSelect=document.querySelector('#aromaSelect');
 const resultCount=document.querySelector('#resultCount');
 let products=[];
+let sortMode='default';
 
 const fallback=[
 {id:'demo-virginia',marca:'Pipateka',nombre:'Virginia Dorado',tipo:'Virginia',composicion:['Virginia'],imagen_local:'assets/images/virginia.svg',resumen_editorial:'Ficha de demostración.',valoracion_comunidad:8.5},
@@ -48,13 +49,16 @@ function setupFilters(){
 
 function filtered(){
   const q=normalize(search?.value||'');
-  return products.filter(p=>{
+  const list=products.filter(p=>{
     const typeOk=!typeSelect?.value||typeSelect.value==='Todos'||categoryMatch(p,typeSelect.value);
     const brandOk=!brandSelect?.value||brandSelect.value==='Todas'||p.marca===brandSelect.value;
     const strengthOk=!strengthSelect?.value||strengthSelect.value==='Todas'||p.fuerza===strengthSelect.value;
     const aromaOk=!aromaSelect?.value||aromaSelect.value==='Todas'||p.aromatizacion===aromaSelect.value;
     return (!q||haystack(p).includes(q))&&typeOk&&brandOk&&strengthOk&&aromaOk;
   });
+  if(sortMode==='rating') list.sort((a,b)=>(Number(b.valoracion_comunidad)||0)-(Number(a.valoracion_comunidad)||0));
+  if(sortMode==='reviews') list.sort((a,b)=>(Number(b.numero_resenas)||0)-(Number(a.numero_resenas)||0));
+  return list;
 }
 
 function productCard(p,compact=false){
@@ -74,17 +78,18 @@ function render(){
   cards.innerHTML=list.length?list.map(p=>productCard(p)).join(''):'<div class="empty"><strong>No hay resultados.</strong><br>Prueba otra categoría o cambia los filtros.</div>';
 }
 
-function applyCategory(category){
-  if(!typeSelect) return;
-  typeSelect.value=categories.includes(category)?category:'Todos';
-  render();
-  document.querySelector('#resenas')?.scrollIntoView({behavior:'smooth',block:'start'});
-}
+function scrollResults(){document.querySelector('#resenas')?.scrollIntoView({behavior:'smooth',block:'start'});}
+function applyCategory(category){if(typeSelect) typeSelect.value=categories.includes(category)?category:'Todos';sortMode='default';render();scrollResults();}
+function applyBrand(brand){if(brandSelect) brandSelect.value=brand||'Todas';sortMode='default';render();scrollResults();}
+function applySort(mode){sortMode=mode||'default';render();scrollResults();}
 
 document.querySelectorAll('[data-category]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();applyCategory(el.dataset.category);}));
-[search,typeSelect,brandSelect,strengthSelect,aromaSelect].filter(Boolean).forEach(el=>el.addEventListener(el===search?'input':'change',render));
-document.querySelector('#searchButton')?.addEventListener('click',render);
-document.querySelector('.more-filters')?.addEventListener('click',()=>document.querySelector('#resenas')?.scrollIntoView({behavior:'smooth',block:'start'}));
+document.querySelectorAll('[data-brand]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();applyBrand(el.dataset.brand);}));
+document.querySelectorAll('[data-sort]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();applySort(el.dataset.sort);}));
+document.querySelectorAll('[data-reset]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();if(search)search.value='';if(typeSelect)typeSelect.value='Todos';if(brandSelect)brandSelect.value='Todas';if(strengthSelect)strengthSelect.value='Todas';if(aromaSelect)aromaSelect.value='Todas';sortMode='default';render();scrollResults();}));
+[search,typeSelect,brandSelect,strengthSelect,aromaSelect].filter(Boolean).forEach(el=>el.addEventListener(el===search?'input':'change',()=>{sortMode='default';render();}));
+document.querySelector('#searchButton')?.addEventListener('click',()=>{sortMode='default';render();scrollResults();});
+document.querySelector('.more-filters')?.addEventListener('click',scrollResults);
 
 async function load(){
   try{
