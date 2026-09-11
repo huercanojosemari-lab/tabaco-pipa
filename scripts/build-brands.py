@@ -16,7 +16,7 @@ def clean(value):
     return re.sub(r'\s+',' ',value).strip()
 
 def fetch(page):
-    req=Request(BASE.format(page),headers={'User-Agent':'Mozilla/5.0 PipatekaBrands/6.0','Accept':'text/plain,text/markdown;q=0.9,*/*;q=0.8'})
+    req=Request(BASE.format(page),headers={'User-Agent':'Mozilla/5.0 PipatekaBrands/7.0','Accept':'text/plain,text/markdown;q=0.9,*/*;q=0.8'})
     return urlopen(req,timeout=30).read().decode('utf-8','ignore')
 
 def parse(text):
@@ -26,32 +26,29 @@ def parse(text):
         if re.search(r'Brand\s*\|.*Blends.*\|.*Reviews',line,re.I): in_table=True; continue
         if not in_table or not line.startswith('|') or re.match(r'^\|\s*-+',line): continue
         cells=[clean(c) for c in line.strip('|').split('|')]
-        if len(cells)<3: continue
-        if re.fullmatch(r'[\d,]+',cells[1]) and re.fullmatch(r'[\d,]+',cells[2]) and cells[0]:
+        if len(cells)>=3 and re.fullmatch(r'[\d,]+',cells[1]) and re.fullmatch(r'[\d,]+',cells[2]) and cells[0]:
             rows.append({'marca':cells[0],'blends':int(cells[1].replace(',','')),'resenas':int(cells[2].replace(',',''))})
     return rows
 
 def worker(page):
-    try:
-        text=fetch(page); found=parse(text)
-        if page==1 and not found: print('DEBUG_FIRST_PAGE:',text[:1800].replace('\n','\\n'))
-        return page,found,None
-    except Exception as exc: return page,[],str(exc)
+    try:return page,parse(fetch(page)),None
+    except Exception as exc:return page,[],str(exc)
 
 rows=[];errors=[]
 with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as pool:
     futures=[pool.submit(worker,p) for p in range(1,35)]
     for done,f in enumerate(concurrent.futures.as_completed(futures),1):
         page,found,error=f.result();rows.extend(found)
-        if error: errors.append((page,error))
+        if error:errors.append((page,error))
         print(f'pages {done}/34: page {page} -> {len(found)} brands; errors={len(errors)}')
 
 merged={r['marca']:(r['blends'],r['resenas']) for r in rows if r.get('marca')}
 brands=[{'marca':k,'blends':v[0],'resenas':v[1]} for k,v in merged.items()]
 brands.sort(key=lambda x:x['marca'].casefold())
-if len(brands)<600:
-    print(f'Only {len(brands)} brands fetched; keeping current data/marcas.json')
-    raise SystemExit(1)
-OUT.parent.mkdir(parents=True,exist_ok=True)
-OUT.write_text(json.dumps({'version':'6.0.0','updated':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'source':'TobaccoReviews','source_scope':'Índice público de marcas; no se reproducen textos de reseñas.','total_marcas_referencia':len(brands),'total_blends_referencia':sum(x['blends'] for x in brands),'marcas':brands},ensure_ascii=False,indent=2),encoding='utf-8')
-print(f'Wrote {len(brands)} brands; errors={len(errors)}')
+if len(brands)>=600:
+    OUT.parent.mkdir(parents=True,exist_ok=True)
+    OUT.write_text(json.dumps({'version':'7.0.0','updated':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'source':'TobaccoReviews','source_scope':'Índice público de marcas; no se reproducen textos de reseñas.','total_marcas_referencia':len(brands),'total_blends_referencia':sum(x['blends'] for x in brands),'marcas':brands},ensure_ascii=False,indent=2),encoding='utf-8')
+    print(f'Wrote {len(brands)} brands; errors={len(errors)}')
+else:
+    print(f'No se pudo refrescar el índice remoto ({len(brands)} marcas recibidas). Se conserva data/marcas.json para no romper la web.')
+    # Do not fail deployment: the remote source currently returns an age/access gate to runners.
