@@ -22,10 +22,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Build complete brand index
-        run: python scripts/build-brands.py
-      - name: Build complete blend index
+      - name: Build expanded blend catalogue
         run: python scripts/build-catalog.py
+      - name: Build brands from loaded catalogue
+        run: python scripts/build-brands.py
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload artifact
