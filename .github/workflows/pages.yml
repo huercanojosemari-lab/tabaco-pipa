@@ -22,10 +22,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+      - name: Install catalogue image dependency
+        run: python -m pip install --disable-pip-version-check --no-input Pillow
       - name: Build expanded blend catalogue
         run: python scripts/build-catalog.py
       - name: Build brands from loaded catalogue
         run: python scripts/build-brands.py
+      - name: Validate generated catalogue
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          catalog = json.loads(Path('data/catalogo-global.json').read_text(encoding='utf-8'))
+          brands = json.loads(Path('data/marcas.json').read_text(encoding='utf-8'))
+          blends = catalog.get('blends', [])
+          loaded_brands = brands.get('marcas', [])
+          if not blends:
+              raise SystemExit('ERROR: el catálogo generado está vacío')
+          if not loaded_brands:
+              raise SystemExit('ERROR: no se han generado marcas')
+          pairs = {(b.get('marca','').casefold(), b.get('nombre','').casefold()) for b in blends}
+          if len(pairs) != len(blends):
+              raise SystemExit('ERROR: hay mezclas duplicadas marca/nombre')
+          print(f'OK: {len(blends)} mezclas, {len(loaded_brands)} marcas cargadas, {catalog.get("blends_con_imagen", 0)} imágenes')
+          PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload artifact
