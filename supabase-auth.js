@@ -15,15 +15,6 @@ const status = (message, kind = 'info') => {
   el.hidden = false;
 };
 
-function setMode(mode) {
-  document.querySelectorAll('[data-auth-mode]').forEach((button) => {
-    button.classList.toggle('active', button.dataset.authMode === mode);
-  });
-  document.querySelectorAll('.auth-panel').forEach((panel) => {
-    panel.hidden = panel.dataset.panel !== mode;
-  });
-}
-
 function metadataFromForm() {
   return {
     display_name: $('name')?.value.trim() || '',
@@ -39,18 +30,14 @@ async function refreshSession() {
   $('loggedOut')?.toggleAttribute('hidden', logged);
   $('loggedIn')?.toggleAttribute('hidden', !logged);
   if (session?.user) {
-    $('accountEmail').textContent = session.user.email || '';
-    $('accountName').textContent = session.user.user_metadata?.display_name || 'Lector de Pipateka';
+    $('accountEmail')?.replaceChildren(document.createTextNode(session.user.email || ''));
+    $('accountName')?.replaceChildren(document.createTextNode(session.user.user_metadata?.display_name || 'Lector de Pipateka'));
   }
 }
 
 if (!configured) {
   status('La interfaz de cuenta está lista. Falta configurar la URL y la Publishable Key de tu proyecto Supabase en supabase-config.js.', 'warning');
 }
-
-document.querySelectorAll('[data-auth-mode]').forEach((button) => {
-  button.addEventListener('click', () => setMode(button.dataset.authMode));
-});
 
 $('registerAuthForm')?.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -74,7 +61,6 @@ $('registerAuthForm')?.addEventListener('submit', async (event) => {
     await refreshSession();
   } else {
     status('Cuenta creada. Revisa tu correo para confirmar la dirección antes de iniciar sesión.', 'success');
-    setMode('login');
   }
 });
 
@@ -96,10 +82,24 @@ $('resetAuthForm')?.addEventListener('submit', async (event) => {
   if (!supabase) return status('Configura primero Supabase en supabase-config.js.', 'warning');
   status('Enviando enlace de recuperación…');
   const { error } = await supabase.auth.resetPasswordForEmail($('resetEmail').value.trim(), {
-    redirectTo: `${location.origin}${location.pathname}?mode=reset`
+    redirectTo: `${location.origin}/cambiar-contrasena.html`
   });
   if (error) return status(error.message, 'error');
-  status('Si el correo existe, recibirás un enlace para restablecer la contraseña.', 'success');
+  status('Si el correo existe, recibirás un enlace para cambiar la contraseña.', 'success');
+});
+
+$('changePasswordForm')?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  if (!supabase) return status('Configura primero Supabase en supabase-config.js.', 'warning');
+  const password = $('newPassword').value;
+  const confirmation = $('confirmPassword').value;
+  if (password.length < 8) return status('La contraseña debe tener al menos 8 caracteres.', 'warning');
+  if (password !== confirmation) return status('Las contraseñas no coinciden.', 'warning');
+  status('Guardando nueva contraseña…');
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return status(error.message, 'error');
+  status('Contraseña actualizada correctamente. Ya puedes iniciar sesión.', 'success');
+  event.currentTarget.reset();
 });
 
 $('logoutButton')?.addEventListener('click', async () => {
@@ -114,6 +114,3 @@ if (supabase) {
   supabase.auth.onAuthStateChange(() => refreshSession());
   refreshSession();
 }
-
-const requestedMode = new URLSearchParams(location.search).get('mode');
-setMode(requestedMode === 'reset' ? 'reset' : 'register');
