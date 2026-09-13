@@ -23,6 +23,10 @@ function metadataFromForm() {
   };
 }
 
+function pageUrl(name) {
+  return new URL(name, window.location.href).href;
+}
+
 async function refreshSession() {
   if (!supabase) return;
   const { data: { session } } = await supabase.auth.getSession();
@@ -52,7 +56,7 @@ $('registerAuthForm')?.addEventListener('submit', async (event) => {
     password,
     options: {
       data: metadataFromForm(),
-      emailRedirectTo: `${location.origin}${location.pathname}`
+      emailRedirectTo: pageUrl('registro.html')
     }
   });
   if (error) return status(error.message, 'error');
@@ -82,7 +86,7 @@ $('resetAuthForm')?.addEventListener('submit', async (event) => {
   if (!supabase) return status('Configura primero Supabase en supabase-config.js.', 'warning');
   status('Enviando enlace de recuperación…');
   const { error } = await supabase.auth.resetPasswordForEmail($('resetEmail').value.trim(), {
-    redirectTo: `${location.origin}/cambiar-contrasena.html`
+    redirectTo: pageUrl('cambiar-contrasena.html')
   });
   if (error) return status(error.message, 'error');
   status('Si el correo existe, recibirás un enlace para cambiar la contraseña.', 'success');
