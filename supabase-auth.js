@@ -28,7 +28,7 @@ function pageUrl(name) {
 }
 
 function homeUrl() {
-  return new URL('index.html', window.location.href).href;
+  return new URL('./', window.location.href).href;
 }
 
 async function refreshSession() {
@@ -44,9 +44,7 @@ async function refreshSession() {
   return session;
 }
 
-if (!configured) {
-  status('La interfaz de cuenta está lista. Falta configurar la URL y la Publishable Key de tu proyecto Supabase en supabase-config.js.', 'warning');
-}
+if (!configured) status('La interfaz de cuenta está lista. Falta configurar la URL y la Publishable Key de tu proyecto Supabase en supabase-config.js.', 'warning');
 
 $('registerAuthForm')?.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -56,43 +54,29 @@ $('registerAuthForm')?.addEventListener('submit', async (event) => {
   const password = $('registerPassword').value;
   if (password.length < 8) return status('La contraseña debe tener al menos 8 caracteres.', 'warning');
   status('Creando tu cuenta…');
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: metadataFromForm(),
-      emailRedirectTo: homeUrl()
-    }
-  });
+  const { data, error } = await supabase.auth.signUp({ email, password, options: { data: metadataFromForm(), emailRedirectTo: homeUrl() } });
   if (error) return status(error.message, 'error');
   if (data.session) {
     status('Cuenta creada y sesión iniciada. Volviendo a Pipateka…', 'success');
-    setTimeout(() => { window.location.replace(homeUrl()); }, 700);
-  } else {
-    status('Cuenta creada. Revisa tu correo para confirmar la dirección; al confirmar volverás a Pipateka.', 'success');
-  }
+    setTimeout(() => window.location.replace(homeUrl()), 700);
+  } else status('Cuenta creada. Revisa tu correo para confirmar la dirección; al confirmar volverás a Pipateka.', 'success');
 });
 
 $('loginAuthForm')?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!supabase) return status('Configura primero Supabase en supabase-config.js.', 'warning');
   status('Iniciando sesión…');
-  const { error } = await supabase.auth.signInWithPassword({
-    email: $('loginEmail').value.trim(),
-    password: $('loginPassword').value
-  });
+  const { error } = await supabase.auth.signInWithPassword({ email: $('loginEmail').value.trim(), password: $('loginPassword').value });
   if (error) return status(error.message, 'error');
   status('Sesión iniciada correctamente. Volviendo a Pipateka…', 'success');
-  setTimeout(() => { window.location.replace(homeUrl()); }, 500);
+  setTimeout(() => window.location.replace(homeUrl()), 500);
 });
 
 $('resetAuthForm')?.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!supabase) return status('Configura primero Supabase en supabase-config.js.', 'warning');
   status('Enviando enlace de recuperación…');
-  const { error } = await supabase.auth.resetPasswordForEmail($('resetEmail').value.trim(), {
-    redirectTo: pageUrl('cambiar-contrasena.html')
-  });
+  const { error } = await supabase.auth.resetPasswordForEmail($('resetEmail').value.trim(), { redirectTo: pageUrl('cambiar-contrasena.html') });
   if (error) return status(error.message, 'error');
   status('Si el correo existe, recibirás un enlace para cambiar la contraseña.', 'success');
 });
@@ -109,7 +93,7 @@ $('changePasswordForm')?.addEventListener('submit', async (event) => {
   if (error) return status(error.message, 'error');
   status('Contraseña actualizada correctamente. Volviendo a Pipateka…', 'success');
   event.currentTarget.reset();
-  setTimeout(() => { window.location.replace(homeUrl()); }, 700);
+  setTimeout(() => window.location.replace(homeUrl()), 700);
 });
 
 $('logoutButton')?.addEventListener('click', async () => {
