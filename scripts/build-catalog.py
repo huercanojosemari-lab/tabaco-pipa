@@ -6,7 +6,7 @@ import re
 import time
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import quote_plus, urlparse
+from urllib.parse import quote_plus, urljoin, urlparse
 from urllib.request import Request, urlopen
 
 from PIL import Image
@@ -14,6 +14,7 @@ from PIL import Image
 OUT = Path('data/catalogo-global.json')
 SOURCE_CATALOG = Path('data/catalogo.json')
 TABACOTECA_URL = 'https://www.fumeursdepipe.net/tabacotheque.php'
+MACBAREN_URL = 'https://mac-baren.com/mac-baren/'
 IMAGE_DIR = Path('assets/tins')
 
 BRAND_PREFIXES = [
@@ -62,9 +63,13 @@ class H4Parser(HTMLParser):
         if self.in_h4: self.buf.append(data)
 
 
-def fetch_source() -> str:
-    req = Request(TABACOTECA_URL, headers={'User-Agent': 'Mozilla/5.0 PipatekaCatalog/3.0'})
+def fetch_url(url: str) -> str:
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaCatalog/4.0'})
     return urlopen(req, timeout=45).read().decode('utf-8', 'ignore')
+
+
+def fetch_source() -> str:
+    return fetch_url(TABACOTECA_URL)
 
 
 def split_brand_name(text: str):
@@ -80,10 +85,49 @@ def slugify(value: str) -> str:
     return value or 'blend'
 
 
+def official_mac_baren_images():
+    """Return official Mac Baren product images keyed by product slug.
+    The official brand page exposes current product cards and their original image URLs.
+    """
+    try:
+        text = fetch_url(MACBAREN_URL)
+        found = {}
+        pattern = re.compile(
+            r'href=[\"\'](?:https?:)?//mac-baren\.com/product/([^\"\']+)[\"\'][^>]*>.*?'
+            r'<img[^>]+(?:src|data-src)=[\"\']([^\"\']+)[\"\']',
+            re.I | re.S,
+        )
+        for match in pattern.finditer(text):
+            product_slug = clean_text(match.group(1)).strip('/')
+            image_url = urljoin(MACBAREN_URL, html.unescape(match.group(2)))
+            if image_url.startswith(('http://', 'https://')):
+                found[product_slug] = image_url
+        print(f'Official Mac Baren image candidates: {len(found)}')
+        return found
+    except Exception as exc:
+        print(f'Warning: official Mac Baren image import failed: {exc}')
+        return {}
+
+
+def official_image_for_blend(blend: str, official):
+    target = slugify(blend)
+    if not target: return None
+    best = None
+    best_score = 0
+    for product_slug, image_url in official.items():
+        ps = slugify(product_slug)
+        if ps == target: return image_url
+        if ps.startswith(target + '-') or target.startswith(ps + '-'):
+            score = min(len(target), len(ps))
+            if score > best_score:
+                best, best_score = image_url, score
+    return best
+
+
 def find_image(brand: str, blend: str):
     query = quote_plus(f'"{brand}" "{blend}" pipe tobacco tin')
     url = f'https://www.bing.com/images/search?q={query}&form=HDRSC2&first=1'
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/2.0', 'Accept': 'text/html'})
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/4.0', 'Accept': 'text/html'})
     text = urlopen(req, timeout=25).read().decode('utf-8', 'ignore')
     patterns = [
         r'"m"\s*:\s*\{[^{}]*?"murl"\s*:\s*"([^"]+)"',
@@ -101,21 +145,21 @@ def find_image(brand: str, blend: str):
 
 
 def download_image(item):
-    brand, blend = item
+    brand, blend, preferred_source = item
     try:
-        source = find_image(brand, blend)
+        source = preferred_source or find_image(brand, blend)
         if not source: return brand, blend, None, None
-        req = Request(source, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/2.0', 'Accept': 'image/avif,image/webp,image/jpeg,image/png,*/*'})
-        raw = urlopen(req, timeout=20).read()
-        if len(raw) < 3000 or len(raw) > 2_000_000: return brand, blend, None, source
+        req = Request(source, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/4.0', 'Accept': 'image/avif,image/webp,image/jpeg,image/png,*/*'})
+        raw = urlopen(req, timeout=25).read()
+        if len(raw) < 3000 or len(raw) > 3_000_000: return brand, blend, None, source
         image = Image.open(io.BytesIO(raw)).convert('RGB')
-        image.thumbnail((220, 220))
+        image.thumbnail((260, 260))
         dest = IMAGE_DIR / f'{slugify(brand)}--{slugify(blend)}.jpg'
-        image.save(dest, 'JPEG', quality=82, optimize=True)
+        image.save(dest, 'JPEG', quality=84, optimize=True)
         return brand, blend, f'assets/tins/{dest.name}', source
     except Exception as exc:
         print(f'Image skipped for {brand} / {blend}: {exc}')
-        return brand, blend, None, None
+        return brand, blend, None, preferred_source
 
 
 def main():
@@ -143,7 +187,11 @@ def main():
     except Exception as exc: print(f'Warning: source import failed: {exc}')
 
     IMAGE_DIR.mkdir(parents=True, exist_ok=True)
-    pairs = [(b['marca'], b['nombre']) for b in blends]
+    official = official_mac_baren_images()
+    pairs = []
+    for b in blends:
+        preferred = official_image_for_blend(b['nombre'], official) if b['marca'].casefold() == 'mac baren' else None
+        pairs.append((b['marca'], b['nombre'], preferred))
     lookup = {(b['marca'], b['nombre']): b for b in blends}
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
         for done, result in enumerate(pool.map(download_image, pairs), 1):
@@ -155,10 +203,10 @@ def main():
     blends.sort(key=lambda x: (x['marca'].casefold(), x['nombre'].casefold()))
     brand_counts = {}
     for b in blends: brand_counts[b['marca']] = brand_counts.get(b['marca'], 0) + 1
-    payload = {'version':'7.0.0', 'updated':time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'source':'Pipateka + Fumeurs de Pipe Tabacothèque + Bing Images (miniaturas)', 'source_url':TABACOTECA_URL, 'source_scope':'Índice de nombres de mezclas y marcas. Las miniaturas son referencias visuales enlazadas desde su fuente de imagen; Pipateka no reproduce textos de reseñas ni afirma disponibilidad comercial.', 'total_blends_cargados':len(blends), 'total_marcas_cargadas':len(brand_counts), 'blends_con_imagen':sum(1 for b in blends if b.get('imagen')), 'reference_tobaccoreviews_blends':8582, 'reference_tobaccoreviews_brands':667, 'blends':blends}
+    payload = {'version':'8.0.0', 'updated':time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'source':'Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren + Bing Images', 'source_url':TABACOTECA_URL, 'source_scope':'Índice de nombres de mezclas y marcas. Para Mac Baren se priorizan imágenes oficiales del fabricante; para otras mezclas se usan miniaturas de referencia visual cuando están disponibles. Pipateka no reproduce textos de reseñas ni afirma disponibilidad comercial.', 'total_blends_cargados':len(blends), 'total_marcas_cargadas':len(brand_counts), 'blends_con_imagen':sum(1 for b in blends if b.get('imagen')), 'blends_mac_baren_con_imagen':sum(1 for b in blends if b.get('marca','').casefold() == 'mac baren' and b.get('imagen')), 'reference_tobaccoreviews_blends':8582, 'reference_tobaccoreviews_brands':667, 'blends':blends}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
-    print(f'Wrote {len(blends)} blends across {len(brand_counts)} brands; images={payload["blends_con_imagen"]}')
+    print(f'Wrote {len(blends)} blends across {len(brand_counts)} brands; images={payload["blends_con_imagen"]}; Mac Baren images={payload["blends_mac_baren_con_imagen"]}')
 
 
 if __name__ == '__main__': main()
