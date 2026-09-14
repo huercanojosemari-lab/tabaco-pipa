@@ -27,8 +27,12 @@ function pageUrl(name) {
   return new URL(name, window.location.href).href;
 }
 
+function homeUrl() {
+  return new URL('index.html', window.location.href).href;
+}
+
 async function refreshSession() {
-  if (!supabase) return;
+  if (!supabase) return null;
   const { data: { session } } = await supabase.auth.getSession();
   const logged = Boolean(session);
   $('loggedOut')?.toggleAttribute('hidden', logged);
@@ -37,6 +41,7 @@ async function refreshSession() {
     $('accountEmail')?.replaceChildren(document.createTextNode(session.user.email || ''));
     $('accountName')?.replaceChildren(document.createTextNode(session.user.user_metadata?.display_name || 'Lector de Pipateka'));
   }
+  return session;
 }
 
 if (!configured) {
@@ -56,15 +61,15 @@ $('registerAuthForm')?.addEventListener('submit', async (event) => {
     password,
     options: {
       data: metadataFromForm(),
-      emailRedirectTo: pageUrl('registro.html')
+      emailRedirectTo: homeUrl()
     }
   });
   if (error) return status(error.message, 'error');
   if (data.session) {
-    status('Cuenta creada y sesión iniciada.', 'success');
-    await refreshSession();
+    status('Cuenta creada y sesión iniciada. Volviendo a Pipateka…', 'success');
+    setTimeout(() => { window.location.replace(homeUrl()); }, 700);
   } else {
-    status('Cuenta creada. Revisa tu correo para confirmar la dirección antes de iniciar sesión.', 'success');
+    status('Cuenta creada. Revisa tu correo para confirmar la dirección; al confirmar volverás a Pipateka.', 'success');
   }
 });
 
@@ -77,8 +82,8 @@ $('loginAuthForm')?.addEventListener('submit', async (event) => {
     password: $('loginPassword').value
   });
   if (error) return status(error.message, 'error');
-  status('Sesión iniciada correctamente.', 'success');
-  await refreshSession();
+  status('Sesión iniciada correctamente. Volviendo a Pipateka…', 'success');
+  setTimeout(() => { window.location.replace(homeUrl()); }, 500);
 });
 
 $('resetAuthForm')?.addEventListener('submit', async (event) => {
@@ -102,8 +107,9 @@ $('changePasswordForm')?.addEventListener('submit', async (event) => {
   status('Guardando nueva contraseña…');
   const { error } = await supabase.auth.updateUser({ password });
   if (error) return status(error.message, 'error');
-  status('Contraseña actualizada correctamente. Ya puedes iniciar sesión.', 'success');
+  status('Contraseña actualizada correctamente. Volviendo a Pipateka…', 'success');
   event.currentTarget.reset();
+  setTimeout(() => { window.location.replace(homeUrl()); }, 700);
 });
 
 $('logoutButton')?.addEventListener('click', async () => {
@@ -115,6 +121,12 @@ $('logoutButton')?.addEventListener('click', async () => {
 });
 
 if (supabase) {
-  supabase.auth.onAuthStateChange(() => refreshSession());
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    await refreshSession();
+    if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && /registro\.html|login\.html/.test(window.location.pathname)) {
+      const hash = window.location.hash || '';
+      if (!hash.includes('access_token') && !window.location.search.includes('code=')) window.location.replace(homeUrl());
+    }
+  });
   refreshSession();
 }
