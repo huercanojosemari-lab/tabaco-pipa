@@ -16,7 +16,7 @@ def slugify(value):
 
 def fetch_json(url):
     raw = urlopen(Request(url, headers={'User-Agent': 'PipatekaCatalog/9.0'}), timeout=30).read()
-    return json.loads(raw.decode('utf-8', 'ignore'))
+    return json.loads(raw.decode('utf-8-sig'))
 
 
 def media_for(name):
@@ -64,7 +64,7 @@ def download(name, source):
 
 
 def main():
-    data = json.loads(CATALOG.read_text(encoding='utf-8'))
+    data = json.loads(CATALOG.read_text(encoding='utf-8-sig'))
     IMAGE_DIR.mkdir(parents=True, exist_ok=True)
     targets = [b for b in data.get('blends', []) if str(b.get('marca', '')).casefold() == 'mac baren' and not b.get('imagen')]
     sources = {}
@@ -85,7 +85,7 @@ def main():
     count = sum(1 for b in data.get('blends', []) if str(b.get('marca', '')).casefold() == 'mac baren' and b.get('imagen'))
     data['blends_con_imagen'] = sum(1 for b in data.get('blends', []) if b.get('imagen'))
     data['blends_mac_baren_con_imagen'] = count
-    data['version'] = '9.0.0'
+    data['version'] = '9.0.1'
     CATALOG.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
     print(f'Mac Baren image enrichment: {count} fichas con imagen')
 
