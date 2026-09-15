@@ -17,36 +17,14 @@ TABACOTECA_URL = 'https://www.fumeursdepipe.net/tabacotheque.php'
 MACBAREN_URL = 'https://mac-baren.com/mac-baren/'
 IMAGE_DIR = Path('assets/tins')
 
-BRAND_PREFIXES = [
-    '4noggins','A&C Petersen','Altadis','Amphora','Arango','Ashton','Astleys','Balkan Sobranie',
-    'Barling','Bell’s','Bell\'s','Bentley','Besson','Bjarne','Breizh Tobacco','Brigham','Butera',
-    'Capstan','Chacom','Charles Fairmorn','Comoy\'s of London','Cornell & Diehl','Dan Pipe',
-    'Dan Tobacco','Daughters & Ryan','Davidoff','Drucquer & Sons','Dunhill','E. Hoffman Company',
-    'Edgeworth','Ente Tabacchi Italiani','Erik Stokkebye','Erinmore','Esoterica','Flandria',
-    'Fribourg & Treyer','Friedman & Pease','G. De Graaff & Sons','G.L. Pease','Gallaher','Gauntleys',
-    'Gawith & Hoggarth & Co','Gawith, Hoggarth & Co','Germain’s','Germain\'s','Gladora Tobacco',
-    'Half & Half','Hans Schürch','Hearth & Home','Hermit','Heupink & Bloemen','HU Tobacco',
-    'Ilsteds','Imperial Tobacco','J.B. Vinche','J.F. Germain & Son','James J. Fox','Jean-Paul Couvert',
-    'John Aylesbury','John Cotton','John Patton','John Sinclair','Joseph Martin','Kendal Tobacco',
-    'Kohlhase, Kopp und Co','L.J. Peretti and Co.','Lane Limited','Larsen','Low Country','Mac Baren',
-    'McClelland','McLintock','Mélange maison','Motzek','Murray & Sons','Murray’s','Murray\'s',
-    'New York Pipe Club','Newminster','Ogden’s of Liverpool','Ogden\'s of Liverpool','Olaf Poulsson',
-    'Orlik','Paul Olsen','Peter Stokkebye','Peterson','Pfeifen Huber','Pfeifen Schneiderwind',
-    'Pfeifen-Studio Mühlhausen','Pfeifendepot','Pipesandcigars.com','Pipeworks & Wilke','Planta',
-    'Poschl Tabak','Poul Stanwell','Rattray’s','Rattray\'s','Reiner','Richmond','Robert Lewis',
-    'Robert McConnell','Samuel Gawith','Scandinavian Tobacco Group','Schneiderwind','Seattle Pipe Club',
-    'Smoker’s Haven','Smoker\'s Haven','Solani','St-Group Assens','Standard Tobacco Company of Pennsylvania',
-    'Sutliff Tobacco Company','Synjeco','Tabacos Wilder','Tabak Träber','Tabakhaus Falkum','TAK',
-    'Tambolaka Natural Tobaccos','Timm','Torben Dansk','Toscani','Tour du Monde des Anglais, en 80 blends',
-    'Tranter Havana House','Troost','V.B','Vauen','Villiger','Vincent Manil','Wessex','Windels','Ramback'
-]
-BRAND_PREFIXES = sorted(set(BRAND_PREFIXES), key=lambda x: (-len(x), x.casefold()))
+BRAND_PREFIXES = sorted(set([
+    '4noggins','A&C Petersen','Altadis','Amphora','Arango','Ashton','Astleys','Balkan Sobranie','Barling','Bell’s','Bell\'s','Bentley','Besson','Bjarne','Breizh Tobacco','Brigham','Butera','Capstan','Chacom','Charles Fairmorn','Comoy\'s of London','Cornell & Diehl','Dan Pipe','Dan Tobacco','Daughters & Ryan','Davidoff','Drucquer & Sons','Dunhill','E. Hoffman Company','Edgeworth','Ente Tabacchi Italiani','Erik Stokkebye','Erinmore','Esoterica','Flandria','Fribourg & Treyer','Friedman & Pease','G. De Graaff & Sons','G.L. Pease','Gallaher','Gauntleys','Gawith & Hoggarth & Co','Gawith, Hoggarth & Co','Germain’s','Germain\'s','Gladora Tobacco','Half & Half','Hans Schürch','Hearth & Home','Hermit','Heupink & Bloemen','HU Tobacco','Ilsteds','Imperial Tobacco','J.B. Vinche','J.F. Germain & Son','James J. Fox','Jean-Paul Couvert','John Aylesbury','John Cotton','John Patton','John Sinclair','Joseph Martin','Kendal Tobacco','Kohlhase, Kopp und Co','L.J. Peretti and Co.','Lane Limited','Larsen','Low Country','Mac Baren','McClelland','McLintock','Mélange maison','Motzek','Murray & Sons','Murray’s','Murray\'s','New York Pipe Club','Newminster','Ogden’s of Liverpool','Ogden\'s of Liverpool','Olaf Poulsson','Orlik','Paul Olsen','Peter Stokkebye','Peterson','Pfeifen Huber','Pfeifen Schneider','Pfeifen-Studio Mühlhausen','Pfeifendepot','Pipesandcigars.com','Pipeworks & Wilke','Planta','Poschl Tabak','Poul Stanwell','Rattray’s','Rattray\'s','Reiner','Richmond','Robert Lewis','Robert McConnell','Samuel Gawith','Scandinavian Tobacco Group','Schneiderwind','Seattle Pipe Club','Smoker’s Haven','Smoker\'s Haven','Solani','St-Group Assens','Standard Tobacco Company of Pennsylvania','Sutliff Tobacco Company','Synjeco','Tabacos Wilder','Tabak Träber','Tabakhaus Falkum','TAK','Tambolaka Natural Tobaccos','Timm','Torben Dansk','Toscani','Tour du Monde des Anglais, en 80 blends','Tranter Havana House','Troost','V.B','Vauen','Villiger','Vincent Manil','Wessex','Windels','Ramback'
+]), key=lambda x: (-len(x), x.casefold()))
 
 
 def clean_text(value: str) -> str:
     value = html.unescape(value or '')
-    value = re.sub(r'\s+', ' ', value)
-    return value.strip(' \t\r\n-')
+    return re.sub(r'\s+', ' ', value).strip(' \t\r\n-')
 
 
 class H4Parser(HTMLParser):
@@ -64,7 +42,7 @@ class H4Parser(HTMLParser):
 
 
 def fetch_url(url: str) -> str:
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaCatalog/4.0'})
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaCatalog/8.1'})
     return urlopen(req, timeout=45).read().decode('utf-8', 'ignore')
 
 
@@ -85,56 +63,89 @@ def slugify(value: str) -> str:
     return value or 'blend'
 
 
-def official_mac_baren_images():
-    """Return official Mac Baren product images keyed by product slug.
-    The official brand page exposes current product cards and their original image URLs.
-    """
+def official_mac_baren_products():
+    """Build a reliable slug -> official product page map from the manufacturer index."""
     try:
         text = fetch_url(MACBAREN_URL)
-        found = {}
-        pattern = re.compile(
-            r'href=[\"\'](?:https?:)?//mac-baren\.com/product/([^\"\']+)[\"\'][^>]*>.*?'
-            r'<img[^>]+(?:src|data-src)=[\"\']([^\"\']+)[\"\']',
-            re.I | re.S,
-        )
-        for match in pattern.finditer(text):
-            product_slug = clean_text(match.group(1)).strip('/')
-            image_url = urljoin(MACBAREN_URL, html.unescape(match.group(2)))
-            if image_url.startswith(('http://', 'https://')):
-                found[product_slug] = image_url
-        print(f'Official Mac Baren image candidates: {len(found)}')
-        return found
+        links = {}
+        for m in re.finditer(r'(?:href|data-href)=[\"\'](https?://mac-baren\.com/product/[^\"\']+|/product/[^\"\']+)[\"\']', text, re.I):
+            url = urljoin(MACBAREN_URL, html.unescape(m.group(1))).split('#')[0]
+            slug = url.rstrip('/').split('/product/')[-1]
+            if slug: links[slug] = url
+        print(f'Official Mac Baren product pages: {len(links)}')
+        return links
     except Exception as exc:
-        print(f'Warning: official Mac Baren image import failed: {exc}')
+        print(f'Warning: official Mac Baren index import failed: {exc}')
         return {}
+
+
+def official_product_image(url: str):
+    try:
+        text = fetch_url(url)
+        m = re.search(r'<meta[^>]+property=[\"\']og:image[\"\'][^>]+content=[\"\']([^\"\']+)', text, re.I)
+        if not m:
+            m = re.search(r'<meta[^>]+content=[\"\']([^\"\']+)[\"\'][^>]+property=[\"\']og:image[\"\']', text, re.I)
+        if m:
+            return urljoin(url, html.unescape(m.group(1)))
+    except Exception:
+        return None
+    return None
+
+
+def official_mac_baren_images():
+    products = official_mac_baren_products()
+    found = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+        futures = {pool.submit(official_product_image, u): slug for slug, u in products.items()}
+        for future in concurrent.futures.as_completed(futures):
+            slug = futures[future]
+            image = future.result()
+            if image: found[slug] = image
+    print(f'Official Mac Baren image candidates: {len(found)}')
+    return found
+
+
+MACBAREN_ALIASES = {
+    'dark-twist': ['Dark Twist Roll Cake', 'Dark Twist Loose Cut'],
+    'mixture': ['Mixture: Scottish Blend', 'Mixture Flake', 'Mixture Modern', 'Mixture Aromatic'],
+    'mixture-aromatic': ['Mixture Aromatic'],
+    'mixture-modern': ['Mixture Modern'],
+    'navy-flake': ['Navy Flake'],
+    'plumcake': ['Plumcake'],
+    'roll-cake': ['Roll Cake'],
+    'stockton': ['Stockton'],
+    'the-solent': ['Solent Mixture'],
+    'vanilla-loose-cut': ['Vanilla Cream Loose Cut', 'Vanilla Choice'],
+    'vanilla-flake': ['Vanilla Cream Flake'],
+    'vanilla-toffee': ['Classic Amber'],
+    'vanilla-roll-cake': ['Vanilla Roll Cake / Classic Roll Cake'],
+    'virginia-flake': ['Virginia Flake'],
+    'virginia-no-1': ['Virginia No. 1'],
+    'cube-gold': ['Cube Gold'],
+    'cube-silver': ['Cube Silver'],
+}
 
 
 def official_image_for_blend(blend: str, official):
     target = slugify(blend)
-    if not target: return None
-    best = None
-    best_score = 0
+    for product_slug, names in MACBAREN_ALIASES.items():
+        if any(slugify(n) == target for n in names) and product_slug in official:
+            return official[product_slug]
+    if target in official: return official[target]
     for product_slug, image_url in official.items():
         ps = slugify(product_slug)
-        if ps == target: return image_url
         if ps.startswith(target + '-') or target.startswith(ps + '-'):
-            score = min(len(target), len(ps))
-            if score > best_score:
-                best, best_score = image_url, score
-    return best
+            return image_url
+    return None
 
 
 def find_image(brand: str, blend: str):
     query = quote_plus(f'"{brand}" "{blend}" pipe tobacco tin')
     url = f'https://www.bing.com/images/search?q={query}&form=HDRSC2&first=1'
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/4.0', 'Accept': 'text/html'})
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/8.1', 'Accept': 'text/html'})
     text = urlopen(req, timeout=25).read().decode('utf-8', 'ignore')
-    patterns = [
-        r'"m"\s*:\s*\{[^{}]*?"murl"\s*:\s*"([^"]+)"',
-        r'"murl"\s*:\s*"([^"]+)"',
-    ]
     candidates = []
-    for pattern in patterns:
+    for pattern in [r'"m"\s*:\s*\{[^{}]*?"murl"\s*:\s*"([^"]+)"', r'"murl"\s*:\s*"([^"]+)"']:
         candidates.extend(m.group(1).replace('\\/', '/') for m in re.finditer(pattern, text))
         if candidates: break
     for full in candidates[:12]:
@@ -149,13 +160,13 @@ def download_image(item):
     try:
         source = preferred_source or find_image(brand, blend)
         if not source: return brand, blend, None, None
-        req = Request(source, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/4.0', 'Accept': 'image/avif,image/webp,image/jpeg,image/png,*/*'})
+        req = Request(source, headers={'User-Agent': 'Mozilla/5.0 PipatekaImages/8.1', 'Accept': 'image/avif,image/webp,image/jpeg,image/png,*/*'})
         raw = urlopen(req, timeout=25).read()
-        if len(raw) < 3000 or len(raw) > 3_000_000: return brand, blend, None, source
+        if len(raw) < 3000 or len(raw) > 4_000_000: return brand, blend, None, source
         image = Image.open(io.BytesIO(raw)).convert('RGB')
-        image.thumbnail((260, 260))
+        image.thumbnail((360, 360))
         dest = IMAGE_DIR / f'{slugify(brand)}--{slugify(blend)}.jpg'
-        image.save(dest, 'JPEG', quality=84, optimize=True)
+        image.save(dest, 'JPEG', quality=88, optimize=True)
         return brand, blend, f'assets/tins/{dest.name}', source
     except Exception as exc:
         print(f'Image skipped for {brand} / {blend}: {exc}')
@@ -203,7 +214,7 @@ def main():
     blends.sort(key=lambda x: (x['marca'].casefold(), x['nombre'].casefold()))
     brand_counts = {}
     for b in blends: brand_counts[b['marca']] = brand_counts.get(b['marca'], 0) + 1
-    payload = {'version':'8.0.0', 'updated':time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'source':'Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren + Bing Images', 'source_url':TABACOTECA_URL, 'source_scope':'Índice de nombres de mezclas y marcas. Para Mac Baren se priorizan imágenes oficiales del fabricante; para otras mezclas se usan miniaturas de referencia visual cuando están disponibles. Pipateka no reproduce textos de reseñas ni afirma disponibilidad comercial.', 'total_blends_cargados':len(blends), 'total_marcas_cargadas':len(brand_counts), 'blends_con_imagen':sum(1 for b in blends if b.get('imagen')), 'blends_mac_baren_con_imagen':sum(1 for b in blends if b.get('marca','').casefold() == 'mac baren' and b.get('imagen')), 'reference_tobaccoreviews_blends':8582, 'reference_tobaccoreviews_brands':667, 'blends':blends}
+    payload = {'version':'8.1.0', 'updated':time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()), 'source':'Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren + referencias visuales', 'source_url':TABACOTECA_URL, 'source_scope':'Índice de nombres y datos de catálogo. Las imágenes se descargan durante la generación y quedan locales en Pipateka; para Mac Baren se prioriza el fabricante.', 'total_blends_cargados':len(blends), 'total_marcas_cargadas':len(brand_counts), 'blends_con_imagen':sum(1 for b in blends if b.get('imagen')), 'blends_mac_baren_con_imagen':sum(1 for b in blends if b.get('marca','').casefold() == 'mac baren' and b.get('imagen')), 'reference_tobaccoreviews_blends':8582, 'reference_tobaccoreviews_brands':667, 'blends':blends}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
     print(f'Wrote {len(blends)} blends across {len(brand_counts)} brands; images={payload["blends_con_imagen"]}; Mac Baren images={payload["blends_mac_baren_con_imagen"]}')
