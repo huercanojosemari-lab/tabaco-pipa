@@ -4,7 +4,7 @@ from pathlib import Path
 from urllib.parse import quote_plus,urljoin,urlparse
 from urllib.request import Request,urlopen
 from PIL import Image
-OUT=Path('data/catalogo-global.json');SOURCE_CATALOG=Path('data/catalogo.json');TABACOTECA_URL='https://www.fumeursdepipe.net/tabacotheque.php';MACBAREN_URL='https://mac-baren.com/mac-baren/';IMAGE_DIR=Path('assets/tins')
+OUT=Path('data/catalogo-global.json');SOURCE_CATALOG=Path('data/catalogo.json');TABACOTECA_URL='https://www.fumeursdepipe.net/tabacotheque.php';MACBAREN_URL='https://mac-baren.com/mac-baren/';MACBAREN_ARCHIVE='https://mac-baren.com/product/page/';IMAGE_DIR=Path('assets/tins')
 BRAND_PREFIXES=sorted(set(['4noggins','A&C Petersen','Altadis','Amphora','Arango','Ashton','Astleys','Balkan Sobranie','Barling','Bell’s','Bell\'s','Bentley','Besson','Bjarne','Breizh Tobacco','Brigham','Butera','Capstan','Chacom','Charles Fairmorn','Comoy\'s of London','Cornell & Diehl','Dan Pipe','Dan Tobacco','Daughters & Ryan','Davidoff','Drucquer & Sons','Dunhill','E. Hoffman Company','Edgeworth','Ente Tabacchi Italiani','Erik Stokkebye','Erinmore','Esoterica','Flandria','Fribourg & Treyer','Friedman & Pease','G. De Graaff & Sons','G.L. Pease','Gallaher','Gauntleys','Gawith & Hoggarth & Co','Gawith, Hoggarth & Co','Germain’s','Germain\'s','Gladora Tobacco','Half & Half','Hans Schürch','Hearth & Home','Hermit','Heupink & Bloemen','HU Tobacco','Ilsteds','Imperial Tobacco','J.B. Vinche','J.F. Germain & Son','James J. Fox','Jean-Paul Couvert','John Aylesbury','John Cotton','John Patton','John Sinclair','Joseph Martin','Kendal Tobacco','Kohlhase, Kopp und Co','L.J. Peretti and Co.','Lane Limited','Larsen','Low Country','Mac Baren','McClelland','McLintock','Mélange maison','Motzek','Murray & Sons','Murray’s','Murray\'s','New York Pipe Club','Newminster','Ogden’s of Liverpool','Ogden\'s of Liverpool','Olaf Poulsson','Orlik','Paul Olsen','Peter Stokkebye','Peterson','Pfeifen Huber','Pfeifen Schneider','Pfeifen-Studio Mühlhausen','Pfeifendepot','Pipesandcigars.com','Pipeworks & Wilke','Planta','Poschl Tabak','Poul Stanwell','Rattray’s','Rattray\'s','Reiner','Richmond','Robert Lewis','Robert McConnell','Samuel Gawith','Scandinavian Tobacco Group','Schneiderwind','Seattle Pipe Club','Smoker’s Haven','Smoker\'s Haven','Solani','St-Group Assens','Standard Tobacco Company of Pennsylvania','Sutliff Tobacco Company','Synjeco','Tabacos Wilder','Tabak Träber','Tabakhaus Falkum','TAK','Tambolaka Natural Tobaccos','Timm','Torben Dansk','Toscani','Tour du Monde des Anglais, en 80 blends','Tranter Havana House','Troost','V.B','Vauen','Villiger','Vincent Manil','Wessex','Windels','Ramback']),key=lambda x:(-len(x),x.casefold()))
 def clean_text(v):return re.sub(r'\s+',' ',html.unescape(v or '')).strip(' \t\r\n-')
 class H4Parser(HTMLParser):
@@ -18,7 +18,7 @@ class H4Parser(HTMLParser):
    self.in_h4=False;self.buf=[]
  def handle_data(self,d):
   if self.in_h4:self.buf.append(d)
-def fetch_url(url):return urlopen(Request(url,headers={'User-Agent':'Mozilla/5.0 PipatekaCatalog/8.4'}),timeout=45).read().decode('utf-8','ignore')
+def fetch_url(url):return urlopen(Request(url,headers={'User-Agent':'Mozilla/5.0 PipatekaCatalog/8.5'}),timeout=45).read().decode('utf-8','ignore')
 def slugify(v):return re.sub(r'[^a-z0-9]+','-',str(v).casefold()).strip('-') or 'blend'
 def split_brand_name(t):
  for b in BRAND_PREFIXES:
@@ -37,8 +37,43 @@ def official_mac_baren_products():
  print('Official Mac Baren product pages:',len(links));return links
 def official_product_image(url):
  try:
-  t=fetch_url(url);m=re.search(r'<meta[^>]+property=[\"\']og:image[\"\'][^>]+content=[\"\']([^\"\']+)',t,re.I) or re.search(r'<meta[^>]+content=[\"\']([^\"\']+)[\"\'][^>]+property=[\"\']og:image[\"\']',t,re.I);return urljoin(url,html.unescape(m.group(1))) if m else None
+  t=fetch_url(url)
+  m=re.search(r'<meta[^>]+property=[\"\']og:image[\"\'][^>]+content=[\"\']([^\"\']+)',t,re.I) or re.search(r'<meta[^>]+content=[\"\']([^\"\']+)[\"\'][^>]+property=[\"\']og:image[\"\']',t,re.I)
+  if m:return urljoin(url,html.unescape(m.group(1)))
+  slug=slugify(url.rstrip('/').split('/product/')[-1])
+  imgs=re.findall(r'<img[^>]+(?:src|data-src)=[\"\']([^\"\']+)[\"\'][^>]*>',t,re.I)
+  good=[]
+  for x in imgs:
+   u=urljoin(url,html.unescape(x))
+   lu=u.lower()
+   if 'wp-content/uploads' in lu and any(k in lu for k in (slug,slug.replace('-','_'))):good.append(u)
+  if good:return good[0]
+  for x in imgs:
+   u=urljoin(url,html.unescape(x));lu=u.lower()
+   if 'wp-content/uploads' in lu and not any(k in lu for k in ('logo','icon','avatar')):return u
+  return None
  except Exception:return None
+def official_archive_images():
+ found={}
+ for page in range(1,19):
+  try:
+   text=fetch_url(MACBAREN_ARCHIVE if page==1 else f'{MACBAREN_ARCHIVE}{page}/')
+   # Archive pages expose WordPress image attachment IDs. Resolve them through the WP media API.
+   blocks=re.split(r'(?=<h[1-6][^>]*>)',text,flags=re.I)
+   for block in blocks:
+    names=re.findall(r'<h[1-6][^>]*>(.*?)</h[1-6]>',block,re.I|re.S)
+    if not names:continue
+    name=clean_text(re.sub('<[^>]+>',' ',names[0]))
+    if not name:continue
+    mid=re.search(r'vc_single_image[^>]+image=[\"\'](\d+)[\"\']',block,re.I)
+    if not mid:continue
+    try:
+     media=fetch_url(f'https://mac-baren.com/wp-json/wp/v2/media/{mid.group(1)}')
+     u=re.search(r'\"source_url\":\"([^\"]+)\"',media)
+     if u:found[name]=html.unescape(u.group(1).replace('\\/','/'))
+    except Exception:continue
+  print(f'Official Mac Baren archive page {page}: {len(found)} images mapped')
+ return found
 def official_mac_baren_images():
  p=official_mac_baren_products();found={}
  with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
@@ -46,6 +81,8 @@ def official_mac_baren_images():
   for f in concurrent.futures.as_completed(fs):
    im=f.result();
    if im:found[fs[f]]=im
+ archive=official_archive_images()
+ for name,u in archive.items():found[f'archive:{slugify(name)}']=u
  print('Official Mac Baren image candidates:',len(found));return found
 ALIASES={'dark-twist':['Dark Twist Roll Cake','Dark Twist Loose Cut'],'mixture':['Mixture: Scottish Blend','Mixture Flake','Mixture Modern','Mixture Aromatic'],'mixture-aromatic':['Mixture Aromatic'],'mixture-modern':['Mixture Modern'],'navy-flake':['Navy Flake'],'plumcake':['Plumcake'],'roll-cake':['Roll Cake'],'stockton':['Stockton'],'the-solent':['Solent Mixture'],'vanilla-loose-cut':['Vanilla Cream Loose Cut','Vanilla Choice'],'vanilla-flake':['Vanilla Cream Flake'],'vanilla-toffee':['Classic Amber'],'vanilla-roll-cake':['Vanilla Roll Cake / Classic Roll Cake'],'virginia-flake':['Virginia Flake'],'virginia-no-1':['Virginia No. 1'],'cube-gold':['Cube Gold'],'cube-silver':['Cube Silver'],'hh-bold-kentucky-flake':['HH Bold Kentucky','HH Bold Kentucky Flake'],'hh-burley-flake':['HH Burley Flake'],'hh-latakia-flake':['HH Latakia Flake'],'hh-old-dark-fired-flake':['HH Old Dark Fired'],'hh-pure-virginia-flake':['HH Pure Virginia'],'hh-vintage-latakia':['HH Vintage Latakia'],'hh-rustica-flake':['HH Rustica'],'hh-balkan-blend':['HH Balkan Blend']}
 def official_image_for_blend(blend,official):
@@ -54,15 +91,15 @@ def official_image_for_blend(blend,official):
   if any(slugify(n)==t for n in names) and s in official:return official[s]
  if t in official:return official[t]
  for s,u in official.items():
-  ps=slugify(s)
-  if ps.startswith(t+'-') or t.startswith(ps+'-'):return u
+  ps=slugify(s.replace('archive:',''))
+  if ps==t or ps.startswith(t+'-') or t.startswith(ps+'-'):return u
  return None
 def find_image(brand,blend):
- q=quote_plus(f'"{brand}" "{blend}" pipe tobacco tin');u=f'https://www.bing.com/images/search?q={q}&form=HDRSC2&first=1';t=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0 PipatekaImages/8.4'}),timeout=25).read().decode('utf-8','ignore');cs=[]
+ q=quote_plus(f'"{brand}" "{blend}" pipe tobacco tin');u=f'https://www.bing.com/images/search?q={q}&form=HDRSC2&first=1';t=urlopen(Request(u,headers={'User-Agent':'Mozilla/5.0 PipatekaImages/8.5'}),timeout=25).read().decode('utf-8','ignore');cs=[]
  for p in [r'"m"\s*:\s*\{[^{}]*?"murl"\s*:\s*"([^"]+)"',r'"murl"\s*:\s*"([^"]+)"']:
   cs += [m.group(1).replace('\\/','/') for m in re.finditer(p,t)]
   if cs:break
- for x in cs[:12]:
+ for x in cs[:20]:
   if not any(z in x.lower() for z in('logo','icon','avatar','.svg')) and urlparse(x).scheme in('http','https'):return x
  return None
 def download_image(item):
@@ -71,7 +108,7 @@ def download_image(item):
  try:
   source=preferred or find_image(brand,blend)
   if not source:return brand,blend,None,None
-  raw=urlopen(Request(source,headers={'User-Agent':'Mozilla/5.0 PipatekaImages/8.4','Accept':'image/avif,image/webp,image/jpeg,image/png,*/*'}),timeout=25).read()
+  raw=urlopen(Request(source,headers={'User-Agent':'Mozilla/5.0 PipatekaImages/8.5','Accept':'image/avif,image/webp,image/jpeg,image/png,*/*'}),timeout=25).read()
   if len(raw)<3000 or len(raw)>4_000_000:return brand,blend,None,source
   im=Image.open(io.BytesIO(raw)).convert('RGB');im.thumbnail((360,360));im.save(dest,'JPEG',quality=88,optimize=True);return brand,blend,f'assets/tins/{dest.name}',source
  except Exception as e:print('Image skipped',brand,blend,e);return brand,blend,None,preferred
@@ -102,5 +139,5 @@ def main():
   for brand,name,path,source in pool.map(download_image,pairs):lookup[(brand,name)]['imagen']=path;lookup[(brand,name)]['imagen_fuente']=source
  blends.sort(key=lambda x:(x['marca'].casefold(),x['nombre'].casefold()));bc={}
  for b in blends:bc[b['marca']]=bc.get(b['marca'],0)+1
- payload={'version':'8.4.0','updated':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'source':'Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren + referencias visuales','source_url':TABACOTECA_URL,'source_scope':'Primera fase: biblioteca local de imágenes para Mac Baren. Se priorizan 32 páginas oficiales actuales y después referencias visuales; las copias se guardan en assets/tins y se reutilizan.','total_blends_cargados':len(blends),'total_marcas_cargadas':len(bc),'blends_con_imagen':sum(1 for b in blends if b.get('imagen')),'blends_mac_baren_con_imagen':sum(1 for b in blends if b.get('marca','').casefold()=='mac baren' and b.get('imagen')),'reference_tobaccoreviews_blends':8582,'reference_tobaccoreviews_brands':667,'blends':blends};OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf-8');print(f'Wrote {len(blends)} blends across {len(bc)} brands; Mac Baren images={payload["blends_mac_baren_con_imagen"]}')
+ payload={'version':'8.5.0','updated':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'source':'Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren','source_url':TABACOTECA_URL,'source_scope':'Biblioteca local Mac Baren: páginas actuales y archivo oficial, con reutilización local de las imágenes descargadas.','total_blends_cargados':len(blends),'total_marcas_cargadas':len(bc),'blends_con_imagen':sum(1 for b in blends if b.get('imagen')),'blends_mac_baren_con_imagen':sum(1 for b in blends if b.get('marca','').casefold()=='mac baren' and b.get('imagen')),'reference_tobaccoreviews_blends':8582,'reference_tobaccoreviews_brands':667,'blends':blends};OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf-8');print(f'Wrote {len(blends)} blends across {len(bc)} brands; Mac Baren images={payload["blends_mac_baren_con_imagen"]}')
 if __name__=='__main__':main()
