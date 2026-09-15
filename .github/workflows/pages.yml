@@ -50,6 +50,7 @@ jobs:
           if not blends: raise SystemExit('ERROR: el catálogo generado está vacío')
           if not loaded_brands: raise SystemExit('ERROR: no se han generado marcas')
           if mac.get('marca') != 'Mac Baren' or len(mac_rows) < 100: raise SystemExit('ERROR: Mac Baren incompleto')
+          if len(loaded_brands) < 100: raise SystemExit(f'ERROR: índice de marcas incompleto: {len(loaded_brands)}')
           pairs = {(str(b.get('marca','')).casefold(), str(b.get('nombre','')).casefold()) for b in blends}
           if len(pairs) != len(blends): raise SystemExit('ERROR: hay mezclas duplicadas marca/nombre')
           incomplete = [b.get('nombre') for b in mac_rows if not b.get('descripcion') or not b.get('reseña_pipateka')]
@@ -57,13 +58,13 @@ jobs:
           print(f'OK: {len(blends)} mezclas, {len(loaded_brands)} marcas, {catalog.get("blends_con_imagen", 0)} imágenes globales')
           print(f'OK: Mac Baren {len(mac_rows)} fichas, {sum(1 for b in mac_rows if b.get("imagen"))} imágenes locales')
           PY
-      - name: Persist local image library
+      - name: Persist generated catalogue and image library
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/tins data/catalogo-global.json data/mac-baren.json
+          git add assets/tins data/catalogo-global.json data/mac-baren.json data/marcas.json
           if ! git diff --cached --quiet; then
-            git commit -m "Actualizar catálogo y biblioteca visual [skip ci]"
+            git commit -m "Actualizar catálogo, marcas y biblioteca visual [skip ci]"
             git push
           else
             echo "No hay cambios generados que guardar."
