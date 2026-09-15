@@ -11,7 +11,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   deploy:
@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
@@ -60,15 +62,31 @@ jobs:
           PY
       - name: Persist generated catalogue and image library
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/tins data/catalogo-global.json data/mac-baren.json data/marcas.json
-          if ! git diff --cached --quiet; then
-            git commit -m "Actualizar catálogo, marcas y biblioteca visual [skip ci]"
-            git push
-          else
+          if git diff --cached --quiet; then
             echo "No hay cambios generados que guardar."
+            exit 0
           fi
+          git commit -m "Actualizar catálogo, marcas y biblioteca visual [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git rebase origin/main || {
+              echo "Rebase conflictivo; abortando para evitar publicar un estado mezclado."
+              git rebase --abort
+              exit 1
+            }
+            if git push origin HEAD:main; then
+              echo "Persistencia completada en el intento $attempt."
+              exit 0
+            fi
+            echo "Push rechazado; se reintentará con el remoto actualizado ($attempt/5)."
+            sleep 2
+          done
+          echo "ERROR: no se pudo sincronizar main después de 5 intentos."
+          exit 1
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload artifact
