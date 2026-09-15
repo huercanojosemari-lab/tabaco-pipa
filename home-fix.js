@@ -13,9 +13,6 @@
       : `<div class="tin-fallback"><span>${escLocal(p.nombre||'Pipateka')}</span></div>`;
     return `<article class="product-card"><a href="producto.html?id=${encodeURIComponent(p.id||`${p.marca}-${p.nombre}`)}" class="product-link"><div class="product-visual">${visual}</div><div class="product-info"><span class="brand">${escLocal(p.marca||'Marca')}</span><h3>${escLocal(p.nombre||T('product'))}</h3><div class="meta">${escLocal(q.tipo||'Ficha editorial')} ${q.pais?' · '+escLocal(q.pais):''}</div><div class="rating"><span class="star">★</span><b>${rating}</b> <span>${reviews}</span></div><div class="strength">${escLocal(q.fuerza||'Información en revisión')} <span class="arrow">${T('arrow')||'→'}</span></div></div></a></article>`;
   };
-  function honestCounts(){
-    const c=document.querySelector('.trust-grid>div:first-child');
-    if(c){const b=c.querySelector('b'),s=c.querySelector('small');if(b)b.textContent='657 mezclas cargadas';if(s)s.textContent='de 122 marcas en el catálogo local'}
-  }
-  document.addEventListener('DOMContentLoaded',()=>{honestCounts();setTimeout(honestCounts,700)});
+  function honestCounts(){const c=document.querySelector('.trust-grid>div:first-child');if(c){const b=c.querySelector('b'),s=c.querySelector('small');if(b)b.textContent='657 mezclas cargadas';if(s)s.textContent='de 122 marcas en el catálogo local'}}
+  document.addEventListener('DOMContentLoaded',()=>{honestCounts();setTimeout(()=>{honestCounts();if(typeof window.render==='function')window.render()},900)});
 })();
