@@ -6,7 +6,7 @@ on:
     - cron: '17 5,17 * * *'
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   actions: read
   pages: write
   id-token: write
@@ -30,6 +30,8 @@ jobs:
         run: python -m pip install --disable-pip-version-check --no-input Pillow
       - name: Build expanded blend catalogue
         run: python scripts/build-catalog.py
+      - name: Build Mac Baren editorial catalogue
+        run: python scripts/build-mac-baren.py
       - name: Build brands from loaded catalogue
         run: python scripts/build-brands.py
       - name: Validate generated catalogue
@@ -39,16 +41,20 @@ jobs:
           from pathlib import Path
           catalog = json.loads(Path('data/catalogo-global.json').read_text(encoding='utf-8'))
           brands = json.loads(Path('data/marcas.json').read_text(encoding='utf-8'))
+          mac = json.loads(Path('data/mac-baren.json').read_text(encoding='utf-8'))
           blends = catalog.get('blends', [])
           loaded_brands = brands.get('marcas', [])
           if not blends:
               raise SystemExit('ERROR: el catálogo generado está vacío')
           if not loaded_brands:
               raise SystemExit('ERROR: no se han generado marcas')
+          if mac.get('marca') != 'Mac Baren' or mac.get('total_blends', 0) < 100:
+              raise SystemExit('ERROR: el catálogo Mac Baren no contiene las fichas esperadas')
           pairs = {(b.get('marca','').casefold(), b.get('nombre','').casefold()) for b in blends}
           if len(pairs) != len(blends):
               raise SystemExit('ERROR: hay mezclas duplicadas marca/nombre')
-          print(f'OK: {len(blends)} mezclas, {len(loaded_brands)} marcas cargadas, {catalog.get("blends_con_imagen", 0)} imágenes')
+          print(f'OK: {len(blends)} mezclas, {len(loaded_brands)} marcas, {catalog.get("blends_con_imagen", 0)} imágenes globales')
+          print(f'OK: Mac Baren {mac["total_blends"]} fichas, {mac.get("blends_con_imagen", 0)} imágenes locales')
           PY
       - name: Configure Pages
         uses: actions/configure-pages@v6
