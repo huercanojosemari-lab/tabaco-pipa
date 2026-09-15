@@ -1,26 +1,27 @@
 # Pipateka
 
-Enciclopedia informativa en español sobre tabacos de pipa.
+Enciclopedia informativa en español sobre tabacos de pipa. El proyecto no vende ni facilita la compra de tabaco.
 
-## Qué incluye
+## Estado actual
 
-- Catálogo local en `data/catalogo.json`.
-- Búsqueda por marca, nombre, tipo y composición.
-- Filtros por familia de mezcla.
-- Fichas individuales en `producto.html`.
-- Campos de trazabilidad para distinguir datos documentados de datos pendientes.
-- Aviso 18+ y enfoque no comercial.
+- Sitio estático publicado con GitHub Pages.
+- Catálogo local generado automáticamente a partir de las fuentes incorporadas al proyecto.
+- Búsqueda por marca, nombre, tipo, país, fuerza, corte y aromatización cuando esos datos están disponibles.
+- Fichas individuales de producto y páginas independientes por marca.
+- Sección específica de Mac Baren con 131 fichas editoriales.
+- Imágenes locales únicamente cuando se ha podido identificar una fuente adecuada; no se inventan asociaciones de imágenes.
+- Registro, inicio de sesión y recuperación de contraseña mediante Supabase Auth.
+- Newsletter mediante Supabase.
+- Aviso 18+ y advertencia sanitaria.
 
-## Método de datos
+## Datos
 
-Pipateka no copia reseñas completas de terceros. Las valoraciones y metadatos públicos se usan como referencia y las síntesis editoriales se redactan de forma propia. La disponibilidad europea se verifica por país y fecha; una ficha pendiente no se presenta como prueba de venta en toda Europa.
+El catálogo local de esta versión contiene 657 mezclas cargadas de 122 marcas. TobaccoReviews se utiliza también como referencia externa de alcance; esa referencia no significa que Pipateka haya cargado automáticamente todas sus fichas.
 
-Las principales referencias metodológicas son TobaccoReviews y la Comisión Europea. La Directiva 2014/40/EU regula, entre otros productos, el tabaco de pipa y establece reglas sobre fabricación, presentación y venta.
+Las valoraciones y metadatos públicos se usan como referencia. Pipateka redacta sus propias síntesis editoriales y no reproduce literalmente reseñas de terceros.
 
 ## Desarrollo
 
-Sitio estático preparado para GitHub Pages. No necesita servidor ni base de datos para funcionar en su estado actual.
+El despliegue se realiza mediante GitHub Actions y GitHub Pages. El workflow genera los catálogos, valida duplicados y fichas incompletas, persiste los datos generados y publica el artefacto final.
 
-## Estado
-
-Se ha restaurado el formato anterior de la interfaz y se han retirado temporalmente todas las imágenes para preparar un nuevo sistema visual desde cero.
+La autenticación y la newsletter requieren la configuración correspondiente del proyecto Supabase.
