@@ -1,30 +1,622 @@
 {
-  "version":"1.0.0",
-  "updated":"2026-09-10",
-  "source":"TobaccoReviews",
-  "source_scope":"Índice mundial de marcas y blends; los recuentos reflejan el índice consultado y deben verificarse antes de afirmar disponibilidad actual.",
-  "total_marcas_referencia":667,
-  "total_blends_referencia":8581,
-  "marcas":[
-    {"marca":"1776 Tobacco Co","blends":10,"resenas":46},
-    {"marca":"1839","blends":1,"resenas":0},
-    {"marca":"2 Guys Smoke Shop","blends":4,"resenas":2},
-    {"marca":"310 Pipe & Tobacco","blends":3,"resenas":4},
-    {"marca":"4 Aces","blends":4,"resenas":8},
-    {"marca":"4noggins","blends":33,"resenas":594},
-    {"marca":"4th Generation","blends":5,"resenas":2},
-    {"marca":"5ive Kings","blends":3,"resenas":1},
-    {"marca":"5th Avenue Cigars","blends":2,"resenas":1},
-    {"marca":"7-20-4","blends":5,"resenas":7},
-    {"marca":"752","blends":4,"resenas":1},
-    {"marca":"A & C Petersen","blends":13,"resenas":123},
-    {"marca":"Abenaki Tobacco Co.","blends":21,"resenas":49},
-    {"marca":"Admiral's Choice","blends":5,"resenas":69},
-    {"marca":"Affordable Pipes","blends":21,"resenas":87},
-    {"marca":"Alfie Turmeaus","blends":22,"resenas":26},
-    {"marca":"Alois Dallmayr","blends":3,"resenas":2},
-    {"marca":"Alsbo","blends":7,"resenas":135},
-    {"marca":"Alt Smokers Pipes","blends":1,"resenas":2},
-    {"marca":"Alte Tabakstube","blends":1,"resenas":1}
+  "version": "8.0.0",
+  "updated": "2026-09-15T12:59:28Z",
+  "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
+  "source_scope": "Marcas derivadas de las mezclas realmente cargadas en el índice local; no representa disponibilidad comercial.",
+  "total_marcas_cargadas": 122,
+  "total_blends_cargados": 657,
+  "total_marcas_referencia": 667,
+  "total_blends_referencia": 8582,
+  "marcas": [
+    {
+      "marca": "4noggins",
+      "blends": 4,
+      "resenas": 0
+    },
+    {
+      "marca": "A&C Petersen",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Altadis",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Amphora",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Arango",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Ashton",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Astleys",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Balkan Sobranie",
+      "blends": 5,
+      "resenas": 0
+    },
+    {
+      "marca": "Barling",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Bell’s",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Bentley",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Besson",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Bjarne",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Breizh",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Brigham",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Butera",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Capstan",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Chacom",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Charles",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Comoy's",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Cornell & Diehl",
+      "blends": 41,
+      "resenas": 0
+    },
+    {
+      "marca": "Dan",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Dan Tobacco",
+      "blends": 22,
+      "resenas": 0
+    },
+    {
+      "marca": "Daughters & Ryan",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Davidoff",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Drucquer & Sons",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Dunhill",
+      "blends": 22,
+      "resenas": 0
+    },
+    {
+      "marca": "E.",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Edgeworth",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Ente",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Erik",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Erinmore",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Esoterica",
+      "blends": 7,
+      "resenas": 0
+    },
+    {
+      "marca": "Flandria",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Fribourg",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Friedman",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "G.",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "G. L. Pease",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "G.L.",
+      "blends": 31,
+      "resenas": 0
+    },
+    {
+      "marca": "Gallaher",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Gauntleys",
+      "blends": 4,
+      "resenas": 0
+    },
+    {
+      "marca": "Gawith & Hoggarth & Co",
+      "blends": 21,
+      "resenas": 0
+    },
+    {
+      "marca": "Gawith, Hoggarth & Co.",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Germain’s",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Gladora",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Half",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Hans",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Hearth",
+      "blends": 14,
+      "resenas": 0
+    },
+    {
+      "marca": "Hermit",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Heupink",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "HU",
+      "blends": 60,
+      "resenas": 0
+    },
+    {
+      "marca": "Ilsteds",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Imperial",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "J.B.",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "J.F. Germain & Son",
+      "blends": 8,
+      "resenas": 0
+    },
+    {
+      "marca": "James J. Fox",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Jean-Paul",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "John",
+      "blends": 6,
+      "resenas": 0
+    },
+    {
+      "marca": "Joseph",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Kendal",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Kohlhase, Kopp und Co",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "L.J. Peretti and Co.",
+      "blends": 9,
+      "resenas": 0
+    },
+    {
+      "marca": "Lane Limited",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Larsen",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Low",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Mac Baren",
+      "blends": 32,
+      "resenas": 413
+    },
+    {
+      "marca": "McClelland",
+      "blends": 55,
+      "resenas": 0
+    },
+    {
+      "marca": "McLintock",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Motzek",
+      "blends": 6,
+      "resenas": 0
+    },
+    {
+      "marca": "Murray",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Murray’s",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Mélange",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "New York Pipe Club",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Newminster",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Ogden’s of Liverpool",
+      "blends": 4,
+      "resenas": 0
+    },
+    {
+      "marca": "Olaf",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Orlik",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Paul",
+      "blends": 12,
+      "resenas": 0
+    },
+    {
+      "marca": "Peter Stokkebye",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Peterson",
+      "blends": 10,
+      "resenas": 0
+    },
+    {
+      "marca": "Pfeifen",
+      "blends": 7,
+      "resenas": 0
+    },
+    {
+      "marca": "Pfeifen-Studio",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Pfeifendepot",
+      "blends": 12,
+      "resenas": 0
+    },
+    {
+      "marca": "Pipesandcigars.com",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Pipeworks & Wilke",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Planta",
+      "blends": 5,
+      "resenas": 0
+    },
+    {
+      "marca": "Poschl Tabak",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Poul",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Rattray’s",
+      "blends": 6,
+      "resenas": 0
+    },
+    {
+      "marca": "Reiner",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Richmond",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Robert",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Robert McConnell",
+      "blends": 13,
+      "resenas": 0
+    },
+    {
+      "marca": "Rotary",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Samuel Gawith",
+      "blends": 23,
+      "resenas": 0
+    },
+    {
+      "marca": "Scandinavian Tobacco Group",
+      "blends": 5,
+      "resenas": 0
+    },
+    {
+      "marca": "Schneiderwind",
+      "blends": 4,
+      "resenas": 0
+    },
+    {
+      "marca": "Seattle Pipe Club",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Smoker's Haven",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Solani",
+      "blends": 5,
+      "resenas": 0
+    },
+    {
+      "marca": "St-Group",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Standard Tobacco Company of Pennsylvania",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Sutliff Tobacco Company",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Synjeco",
+      "blends": 9,
+      "resenas": 0
+    },
+    {
+      "marca": "Tabacos",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Tabak Träber",
+      "blends": 4,
+      "resenas": 0
+    },
+    {
+      "marca": "Tabakhaus",
+      "blends": 15,
+      "resenas": 0
+    },
+    {
+      "marca": "TAK",
+      "blends": 41,
+      "resenas": 0
+    },
+    {
+      "marca": "Tambolaka",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Timm",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Torben Dansk",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Toscani",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Tour du Monde des Anglais, en 80 blends",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Tranter",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Troost",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "V.B",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Vauen",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Villiger",
+      "blends": 1,
+      "resenas": 0
+    },
+    {
+      "marca": "Vincent Manil",
+      "blends": 3,
+      "resenas": 0
+    },
+    {
+      "marca": "Wessex",
+      "blends": 4,
+      "resenas": 0
+    },
+    {
+      "marca": "Windels",
+      "blends": 2,
+      "resenas": 0
+    },
+    {
+      "marca": "Wolfway",
+      "blends": 1,
+      "resenas": 0
+    }
   ]
 }
