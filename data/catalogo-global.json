@@ -1,6 +1,6 @@
 {
   "version": "9.0.1",
-  "updated": "2026-09-15T08:26:09Z",
+  "updated": "2026-09-15T10:07:16Z",
   "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
   "source_url": "https://www.fumeursdepipe.net/tabacotheque.php",
   "source_scope": "Biblioteca local Mac Baren con páginas actuales y archivo oficial; las imágenes descargadas se reutilizan localmente.",
@@ -4989,7 +4989,7 @@
       "aromatizacion": "",
       "fuente": "Fumeurs de Pipe · Tabacothèque",
       "imagen": "assets/tins/mac-baren--amphora-burley.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680_Amphora-Burley-Blend-600x425.jpg"
+      "imagen_fuente": "local-cache"
     },
     {
       "id": "fp-mac-baren-amphora-full",
@@ -5004,7 +5004,7 @@
       "aromatizacion": "",
       "fuente": "Fumeurs de Pipe · Tabacothèque",
       "imagen": "assets/tins/mac-baren--amphora-full.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2016/07/amphora-full-aroma.jpg"
+      "imagen_fuente": "local-cache"
     },
     {
       "id": "fp-mac-baren-amphora-kentucky-blend",
@@ -5019,7 +5019,7 @@
       "aromatizacion": "",
       "fuente": "Fumeurs de Pipe · Tabacothèque",
       "imagen": "assets/tins/mac-baren--amphora-kentucky-blend.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680_Amphora-Kentucky-Blend-600x425.jpg"
+      "imagen_fuente": "local-cache"
     },
     {
       "id": "fp-mac-baren-caporal-brun",
@@ -5034,7 +5034,7 @@
       "aromatizacion": "",
       "fuente": "Fumeurs de Pipe · Tabacothèque",
       "imagen": "assets/tins/mac-baren--caporal-brun.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/09/img-caporal-coupe-fine-brun.jpg"
+      "imagen_fuente": "local-cache"
     },
     {
       "id": "fp-mac-baren-classic-roll-cake",
@@ -5049,7 +5049,7 @@
       "aromatizacion": "",
       "fuente": "Fumeurs de Pipe · Tabacothèque",
       "imagen": "assets/tins/mac-baren--classic-roll-cake.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2024/08/MB-Vanilla-Roll-Cake-1390x380-1.jpg"
+      "imagen_fuente": "local-cache"
     },
     {
       "id": "fp-mac-baren-club-blend",
@@ -5364,7 +5364,7 @@
       "aromatizacion": "",
       "fuente": "Fumeurs de Pipe · Tabacothèque",
       "imagen": "assets/tins/mac-baren--scaferlati-caporal.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/06/cat-pipe-tobacco-scaferlati-caporal.jpg"
+      "imagen_fuente": "local-cache"
     },
     {
       "id": "fp-mac-baren-scaferlati-vert",
