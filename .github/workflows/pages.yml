@@ -60,6 +60,19 @@ jobs:
           print(f'OK: {len(blends)} mezclas, {len(loaded_brands)} marcas, {catalog.get("blends_con_imagen", 0)} imágenes globales')
           print(f'OK: Mac Baren {len(mac_rows)} fichas, {sum(1 for b in mac_rows if b.get("imagen"))} imágenes locales')
           PY
+      - name: Validate frontend assets and JavaScript
+        run: |
+          set -euo pipefail
+          for file in index.html catalogo.html marcas.html tipos.html pipateka.css pipateka-data.js pipateka.js assets/pipateka-logo.svg assets/tins/editorial-tin.svg; do
+            test -f "$file" || { echo "ERROR: falta $file"; exit 1; }
+          done
+          node --check pipateka-data.js
+          node --check pipateka.js
+          grep -q 'id="catalogGrid"' index.html
+          grep -q 'id="detailModal"' index.html
+          grep -q 'id="catalogGrid"' catalogo.html
+          grep -q 'id="detailModal"' catalogo.html
+          echo "OK: frontend editorial, assets y JavaScript validados."
       - name: Persist generated catalogue and image library
         run: |
           set -euo pipefail
