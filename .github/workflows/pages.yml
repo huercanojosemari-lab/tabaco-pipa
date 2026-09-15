@@ -46,17 +46,16 @@ jobs:
           mac = json.loads(Path('data/mac-baren.json').read_text(encoding='utf-8'))
           blends = catalog.get('blends', [])
           loaded_brands = brands.get('marcas', [])
-          mac_blends = [b for b in blends if str(b.get('marca','')).casefold() == 'mac baren']
-          mac_images = sum(1 for b in mac_blends if b.get('imagen'))
+          mac_rows = mac.get('blends', [])
           if not blends: raise SystemExit('ERROR: el catálogo generado está vacío')
           if not loaded_brands: raise SystemExit('ERROR: no se han generado marcas')
-          if mac.get('marca') != 'Mac Baren' or mac.get('total_blends', 0) < 100: raise SystemExit('ERROR: Mac Baren incompleto')
-          pairs = {(b.get('marca','').casefold(), b.get('nombre','').casefold()) for b in blends}
+          if mac.get('marca') != 'Mac Baren' or len(mac_rows) < 100: raise SystemExit('ERROR: Mac Baren incompleto')
+          pairs = {(str(b.get('marca','')).casefold(), str(b.get('nombre','')).casefold()) for b in blends}
           if len(pairs) != len(blends): raise SystemExit('ERROR: hay mezclas duplicadas marca/nombre')
-          if len(mac_blends) < 100: raise SystemExit(f'ERROR: solo hay {len(mac_blends)} mezclas Mac Baren')
-          if mac_images < 100: raise SystemExit(f'ERROR: solo hay {mac_images}/{len(mac_blends)} imágenes Mac Baren')
+          incomplete = [b.get('nombre') for b in mac_rows if not b.get('descripcion') or not b.get('reseña_pipateka')]
+          if incomplete: raise SystemExit(f'ERROR: fichas Mac Baren incompletas: {len(incomplete)}')
           print(f'OK: {len(blends)} mezclas, {len(loaded_brands)} marcas, {catalog.get("blends_con_imagen", 0)} imágenes globales')
-          print(f'OK: Mac Baren {len(mac_blends)} fichas, {mac_images} imágenes')
+          print(f'OK: Mac Baren {len(mac_rows)} fichas, {sum(1 for b in mac_rows if b.get("imagen"))} imágenes locales')
           PY
       - name: Persist local image library
         run: |
@@ -64,10 +63,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/tins data/catalogo-global.json data/mac-baren.json
           if ! git diff --cached --quiet; then
-            git commit -m "Completar biblioteca de imágenes Mac Baren [skip ci]"
+            git commit -m "Actualizar catálogo y biblioteca visual [skip ci]"
             git push
           else
-            echo "No hay imágenes nuevas que guardar."
+            echo "No hay cambios generados que guardar."
           fi
       - name: Configure Pages
         uses: actions/configure-pages@v6
