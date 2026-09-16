@@ -72,6 +72,24 @@ jobs:
           grep -q 'id="detailModal"' index.html
           grep -q 'id="catalogGrid"' catalogo.html
           grep -q 'id="detailModal"' catalogo.html
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          data = Path('pipateka-data.js').read_text(encoding='utf-8')
+          required = ['id','nombre','marca','tipo','corte','fuerza','aroma','composicion','valoracion','popularidad','disponibilidad','imagen','reseñas']
+          objects = re.findall(r'\{\s*id:', data)
+          if len(objects) < 10:
+              raise SystemExit(f'ERROR: BBDD_TABACOS contiene menos de 10 fichas: {len(objects)}')
+          for field in required:
+              if field not in data:
+                  raise SystemExit(f'ERROR: falta el campo requerido {field} en BBDD_TABACOS')
+          if data.count('reseñas:[') < 10:
+              raise SystemExit('ERROR: faltan arrays de reseñas en BBDD_TABACOS')
+          html = Path('index.html').read_text(encoding='utf-8')
+          if '8.500+' in html or '8500+' in html:
+              raise SystemExit('ERROR: métrica obsoleta 8.500+ detectada; debe distinguir referencia externa de datos locales')
+          print(f'OK: BBDD_TABACOS validada con {len(objects)} fichas.')
+          PY
           echo "OK: frontend editorial, assets y JavaScript validados."
       - name: Persist generated catalogue and image library
         run: |
