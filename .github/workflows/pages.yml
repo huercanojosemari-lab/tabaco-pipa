@@ -82,7 +82,6 @@ jobs:
           node --check pipateka-data.js
           node --check pipateka.js
           node --check marca.js
-          node --check scripts/enrich-catalog.py 2>/dev/null || true
           grep -q 'id="catalogGrid"' index.html
           grep -q 'id="detailModal"' index.html
           grep -q 'id="catalogGrid"' catalogo.html
