@@ -1,6 +1,6 @@
 {
   "version": "9.0.1",
-  "updated": "2026-09-18T05:24:01Z",
+  "updated": "2026-09-18T05:45:35Z",
   "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
   "source_url": "https://www.fumeursdepipe.net/tabacotheque.php",
   "source_scope": "Índice combinado de Fumeurs de Pipe y listados completos de marcas principales de TobaccoReviews.",
@@ -17660,7 +17660,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amphora-burley-blend.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680_Amphora-Burley-Blend.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17707,7 +17707,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amphora-full-aroma.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2016/07/amphora-full-aroma.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17755,7 +17755,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amphora-mellow-blend.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2016/07/amphora-mellow-blend.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17771,7 +17771,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amphora-original-blend.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2016/07/amphora-original-blend.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17803,7 +17803,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amphora-rich-aroma.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2016/07/amphora-rich-aroma.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17867,7 +17867,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amphora-virginia.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2016/07/amphora-virginia-blend.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17883,7 +17883,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--amsterdamer.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/05/960x680_Amsterdamer-100pct.png",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17915,7 +17915,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--black-ambrosia.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2024/08/MB-Black-Ambrosia-960x680px.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17979,7 +17979,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--brigg-honigmelone.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680px_Brigg-honigmelone.png",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -17995,7 +17995,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--brigg-regular.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680px_Brigg-regular.png",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -18011,7 +18011,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--brigg-vanilla.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680px_Brigg-vanilla.png",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -18217,7 +18217,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--coconut.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2020/07/960x680px_Brigg-coconut-pineapple.png",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -18392,7 +18392,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--gold-block.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/09/st-bruno-blends-img-gold-block.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -18824,7 +18824,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--highland-mixture.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/09/st-bruno-blends-img-highland-mixture.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -19158,7 +19158,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--original-flake.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/09/st-bruno-blends-img-original-flake.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -19555,7 +19555,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--three-nuns.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/06/cat-pipe-tobacco-three-nuns.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
@@ -19746,7 +19746,7 @@
       "aromatizacion": "",
       "fuente": "TobaccoReviews",
       "imagen": "assets/tins/mac-baren--virginia-blend.jpg",
-      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/09/14-mac-baren-virginia-blend-pic.jpg",
+      "imagen_fuente": "local-cache",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/"
     },
     {
