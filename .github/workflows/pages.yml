@@ -92,7 +92,7 @@ jobs:
           for field in required:
               if field not in data:
                   raise SystemExit(f'ERROR: falta el campo requerido {field} en BBDD_TABACOS')
-          if data.count('reseñas:[') < 10:
+          if data.count('"reseñas"') < 1000:
               raise SystemExit('ERROR: faltan arrays de reseñas en BBDD_TABACOS')
           html = Path('index.html').read_text(encoding='utf-8')
           if '8.500+' in html or '8500+' in html:
