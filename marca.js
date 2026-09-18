@@ -24,7 +24,7 @@ function render(rows,brand){
 function load(){
   const requested=new URLSearchParams(location.search).get('brand');
   if(!requested){location.replace('catalogo.html');return}
-  const all=Array.isArray(globalThis.BBDD_TABACOS)?globalThis.BBDD_TABACOS:[];
+  const all=typeof BBDD_TABACOS!=='undefined'&&Array.isArray(BBDD_TABACOS)?BBDD_TABACOS:[];
   const rowsAll=all.filter(b=>b&&b.marca&&b.nombre);
   const requestedNorm=norm(requested);
   const brand=rowsAll.find(b=>norm(b.marca)===requestedNorm)?.marca;
