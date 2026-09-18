@@ -42,7 +42,7 @@ def slug(v):
     return re.sub(r"[^a-z0-9]+","-",v.casefold()).strip("-")
 
 def fetch(url):
-    return urlopen(Request(url,headers={"User-Agent":"Mozilla/5.0 PipatekaCatalog/10.1"}),timeout=45).read().decode("utf-8","ignore")
+    return urlopen(Request(url,headers={"User-Agent":"Mozilla/5.0 PipatekaCatalog/10.1"}),timeout=18).read().decode("utf-8","ignore")
 
 def parse_brand(brand,url):
     html_text=fetch(url)
@@ -75,7 +75,13 @@ def main():
         if brand and name: merged[(bkey(brand),name.casefold())]=row
     counts={}
     for brand,url in KNOWN_BRANDS.items():
-        rows=parse_brand(brand,url); counts[brand]=len(rows)
+        try:
+            rows=parse_brand(brand,url)
+        except Exception as exc:
+            print(f"Warning: no se pudo actualizar {brand}: {exc}")
+            rows=[]
+        existing_count=sum(1 for x in merged.values() if bkey(x.get("marca",""))==bkey(brand))
+        counts[brand]=max(len(rows),existing_count)
         for row in rows:
             k=(bkey(row["marca"]),row["nombre"].casefold())
             if k in merged:
