@@ -32,12 +32,16 @@ jobs:
         run: python -m pip install --disable-pip-version-check --no-input Pillow
       - name: Build expanded blend catalogue
         run: python scripts/build-catalog.py
+      - name: Import complete catalogues for known major brands
+        run: python scripts/import-known-brands.py
       - name: Enrich Mac Baren images from official media library
         run: python scripts/enrich-mac-baren-images.py
       - name: Build Mac Baren editorial catalogue
         run: python scripts/build-mac-baren.py
       - name: Build brands from loaded catalogue
         run: python scripts/build-brands.py
+      - name: Sync frontend catalogue from generated index
+        run: python scripts/sync-frontend-data.py
       - name: Validate generated catalogue
         run: |
           python - <<'PY'
