@@ -62,7 +62,7 @@ def make(row):
         "disponibilidad":availability,"produccion":production or "No especificada en la fuente",
         "descripcion":desc,"reseña_pipateka":f"Ficha documental de {name}: combina los campos estructurados disponibles de la fuente y no sustituye las reseñas literales de usuarios.",
         "imagen":row.get("imagen") or "assets/tins/editorial-tin.svg",
-        "marca_imagen":row.get("marca_imagen") or f"assets/brands/{slugify(brand)}.svg",
+        "imagen_marca":row.get("imagen_marca") or f"assets/brands/{slugify(brand)}.svg",
         "reseñas":row.get("reseñas") if isinstance(row.get("reseñas"),list) else [],
         "_resenas_fuente":int(row.get("resenas") or 0),
         "fuente":row.get("fuente") or "Pipateka",
@@ -80,7 +80,7 @@ def main():
         if prev:
             for f,v in prev.items():
                 if v not in ("",None,[],{}): row[f]=v
-            row["marca_imagen"]=f"assets/brands/{slugify(row['marca'])}.svg"
+            row["imagen_marca"]=f"assets/brands/{slugify(row['marca'])}.svg"
             row["_resenas_fuente"]=int(raw.get("resenas") or prev.get("_resenas_fuente") or 0)
         rows.append(row)
     FRONTEND.write_text("const BBDD_TABACOS = "+json.dumps(rows,ensure_ascii=False,separators=(",",":"))+";\n",encoding="utf-8")
