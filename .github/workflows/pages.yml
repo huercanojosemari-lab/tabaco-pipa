@@ -56,7 +56,12 @@ jobs:
           if not blends: raise SystemExit('ERROR: el catálogo generado está vacío')
           if not loaded_brands: raise SystemExit('ERROR: no se han generado marcas')
           if mac.get('marca') != 'Mac Baren' or len(mac_rows) < 100: raise SystemExit('ERROR: Mac Baren incompleto')
-          if len(loaded_brands) < 100: raise SystemExit(f'ERROR: índice de marcas incompleto: {len(loaded_brands)}')\n          if len(blends) < 1000: raise SystemExit(f'ERROR: catálogo global inesperadamente pequeño: {len(blends)}')\n          required_known = {'Mac Baren':100,'Peterson':60,'Samuel Gawith':80,'Cornell & Diehl':250,'Gawith, Hoggarth & Co.':150,'Dan Tobacco':80,'Sutliff Tobacco Company':250,\"Rattray's\":30,'Dunhill':40,'Esoterica Tobacciana':15,'McClelland':150,'Seattle Pipe Club':25,'Wessex':20,'A&C Petersen':10}\n          known_sources = catalog.get('known_brand_sources', {})\n          missing_known=[f'{b} ({known_sources.get(b,0)})' for b,m in required_known.items() if int(known_sources.get(b,0) or 0)<m]\n          if missing_known: raise SystemExit('ERROR: faltan fichas de marcas principales: '+', '.join(missing_known))
+          if len(loaded_brands) < 100: raise SystemExit(f'ERROR: índice de marcas incompleto: {len(loaded_brands)}')
+          if len(blends) < 1000: raise SystemExit(f'ERROR: catálogo global inesperadamente pequeño: {len(blends)}')
+          required_known = {'Mac Baren':100,'Peterson':60,'Samuel Gawith':80,'Cornell & Diehl':250,'Gawith, Hoggarth & Co.':150,'Dan Tobacco':80,'Sutliff Tobacco Company':250,\"Rattray's\":30,'Dunhill':40,'Esoterica Tobacciana':15,'McClelland':150,'Seattle Pipe Club':25,'Wessex':20,'A&C Petersen':10}
+          known_sources = catalog.get('known_brand_sources', {})
+          missing_known=[f'{b} ({known_sources.get(b,0)})' for b,m in required_known.items() if int(known_sources.get(b,0) or 0)<m]
+          if missing_known: raise SystemExit('ERROR: faltan fichas de marcas principales: '+', '.join(missing_known))
           pairs = {(str(b.get('marca','')).casefold(), str(b.get('nombre','')).casefold()) for b in blends}
           if len(pairs) != len(blends): raise SystemExit('ERROR: hay mezclas duplicadas marca/nombre')
           incomplete = [b.get('nombre') for b in mac_rows if not b.get('descripcion') or not b.get('reseña_pipateka')]
