@@ -72,15 +72,19 @@ jobs:
       - name: Validate frontend assets and JavaScript
         run: |
           set -euo pipefail
-          for file in index.html catalogo.html marcas.html tipos.html pipateka.css pipateka-data.js pipateka.js assets/pipateka-logo.svg assets/tins/editorial-tin.svg; do
+          for file in index.html catalogo.html marcas.html marca.html tipos.html pipateka.css pipateka-data.js pipateka.js marca.js assets/pipateka-logo.svg assets/tins/editorial-tin.svg; do
             test -f "$file" || { echo "ERROR: falta $file"; exit 1; }
           done
           node --check pipateka-data.js
           node --check pipateka.js
+          node --check marca.js
           grep -q 'id="catalogGrid"' index.html
           grep -q 'id="detailModal"' index.html
           grep -q 'id="catalogGrid"' catalogo.html
           grep -q 'id="detailModal"' catalogo.html
+          grep -q 'pipateka-data.js' marca.html
+          grep -q "typeof BBDD_TABACOS" marca.js
+          grep -q "EDITORIAL_IDS.includes(item.id)" pipateka.js
           python - <<'PY'
           import re
           from pathlib import Path
