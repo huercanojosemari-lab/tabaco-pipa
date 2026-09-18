@@ -29,7 +29,11 @@ def make(row):
     if isinstance(comp,list): comp=", ".join(map(str,comp))
     comp=str(comp or "No especificada en la fuente consultada.")
     cut=str(row.get("corte") or "No especificado en la fuente consultada.")
-    strength=float(row.get("fuerza") or 0)
+    strength_raw=row.get("fuerza")
+    try:
+        strength=float(strength_raw or 0)
+    except (TypeError, ValueError):
+        strength={"extremely mild":1,"very mild":1,"mild":1.5,"mild to medium":2,"medium":3,"medium to strong":4,"strong":4.5,"very strong":5,"overwhelming":5}.get(str(strength_raw).casefold().strip(),0)
     fuerza_label=str(row.get("fuerza_label") or "No especificada en la fuente consultada.")
     aroma=str(row.get("aroma") or "").strip()
     if not aroma:
