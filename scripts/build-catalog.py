@@ -250,6 +250,26 @@ def download_image(item):
 def load_blends():
     blends = []
     seen = set()
+
+    # Conserva el catálogo consolidado ya publicado para que una fuente externa
+    # lenta o temporalmente caída no haga desaparecer fichas existentes.
+    if OUT.exists():
+        try:
+            previous = json.loads(OUT.read_text(encoding='utf-8'))
+            for product in previous.get('blends', []):
+                name = product.get('nombre')
+                brand = product.get('marca')
+                if not name or not brand:
+                    continue
+                key = (str(brand).casefold(), str(name).casefold())
+                if key in seen:
+                    continue
+                seen.add(key)
+                blends.append(product.copy())
+            print(f'Preserved consolidated catalogue: {len(blends)} rows')
+        except Exception as exc:
+            print('Previous catalogue warning:', exc)
+
     if SOURCE_CATALOG.exists():
         try:
             seed = json.loads(SOURCE_CATALOG.read_text(encoding='utf-8'))
@@ -258,7 +278,7 @@ def load_blends():
                 brand = product.get('marca')
                 if not name or not brand:
                     continue
-                key = (brand.casefold(), name.casefold())
+                key = (str(brand).casefold(), str(name).casefold())
                 if key in seen:
                     continue
                 seen.add(key)
@@ -270,10 +290,11 @@ def load_blends():
                     'tipo': product.get('tipo') or '', 'pais': product.get('origen') or '',
                     'corte': product.get('corte') or '', 'fuerza': product.get('fuerza') or '',
                     'aromatizacion': product.get('aromatizacion') or '',
-                    'fuente': 'Pipateka editorial', 'imagen': None, 'imagen_fuente': None
+                    'fuente': 'Pipateka editorial', 'imagen': product.get('imagen'), 'imagen_fuente': product.get('imagen_fuente')
                 })
         except Exception as exc:
             print('Seed warning:', exc)
+
     try:
         parser = H4Parser()
         parser.feed(fetch_url(TABACOTECA_URL))
@@ -294,7 +315,6 @@ def load_blends():
     except Exception as exc:
         print('Source warning:', exc)
     return blends
-
 
 def main():
     IMAGE_DIR.mkdir(parents=True, exist_ok=True)
