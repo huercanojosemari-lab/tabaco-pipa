@@ -186,16 +186,17 @@ def main():
         b["fuente_detalle"]=p.get("url")
         b["fuente"]="TobaccoReviews + Pipateka"
     for b in data.get("blends",[]):
-        b.setdefault("pais","No especificado en la fuente consultada")
-        b.setdefault("corte",cut_from_name(b.get("nombre","")) or "No especificado en la fuente consultada")
-        b.setdefault("composicion","No especificada en la fuente consultada")
-        b.setdefault("aromatizacion","No especificada en la fuente consultada")
-        b.setdefault("fuerza_label","No especificada en la fuente consultada")
-        b.setdefault("fuerza",0)
-        b.setdefault("nota_estancia","No especificada en la fuente consultada")
-        b.setdefault("sabor","No especificado en la fuente consultada")
-        b.setdefault("produccion","No especificada en la fuente consultada")
-        b.setdefault("packaging","No especificado en la fuente consultada")
+        if not b.get("tipo"): b["tipo"]="Sin clasificar; fuente no especifica el tipo"
+        if not b.get("pais"): b["pais"]="No especificado en la fuente consultada"
+        if not b.get("corte"): b["corte"]=cut_from_name(b.get("nombre","")) or "No especificado en la fuente consultada"
+        if not b.get("composicion"): b["composicion"]="No especificada en la fuente consultada"
+        if not b.get("aromatizacion"): b["aromatizacion"]="No especificada en la fuente consultada"
+        if not b.get("fuerza_label"): b["fuerza_label"]="No especificada en la fuente consultada"
+        if "fuerza" not in b or b.get("fuerza") in (None,""): b["fuerza"]=0
+        if not b.get("nota_estancia"): b["nota_estancia"]="No especificada en la fuente consultada"
+        if not b.get("sabor"): b["sabor"]="No especificado en la fuente consultada"
+        if not b.get("produccion"): b["produccion"]="No especificada en la fuente consultada"
+        if not b.get("packaging"): b["packaging"]="No especificado en la fuente consultada"
         if not b.get("descripcion"):
             b["descripcion"]=summary(b)
         b["reseña_pipateka"]=f"Datos de comunidad: {int(b.get('resenas') or 0):,} reseñas; media {b.get('valoracion') if b.get('valoracion') not in (None,'') else 'no disponible'} / 4. Síntesis editorial de Pipateka, sin reproducir literalmente opiniones de terceros."
