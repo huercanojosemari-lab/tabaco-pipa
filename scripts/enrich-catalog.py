@@ -150,7 +150,9 @@ def main():
     targets=[b for b in data.get("blends",[]) if b.get("fuente_blend_url")]
     def work(b):
         url=b["fuente_blend_url"]; key=b.get("id") or url
-        if key in cache: return key, cache[key]
+        cached=cache.get(key)
+        if cached and cached.get('ok'):
+            return key, cached
         try:
             page=fetch(url)
             parsed=parse_page(page)
@@ -159,10 +161,12 @@ def main():
         except Exception as exc:
             return key, {"url":url,"ok":False,"error":str(exc)}
     done=0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=48) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         for key,parsed in pool.map(work, targets):
             cache[key]=parsed; done+=1
-            if done%100==0: print(f"Enrichment: {done}/{len(targets)}")
+            if done%50==0:
+                ok_now=sum(1 for x in cache.values() if x.get("ok"))
+                print(f"Enrichment: {done}/{len(targets)} · correctas acumuladas {ok_now}")
     CACHE.parent.mkdir(parents=True,exist_ok=True)
     CACHE.write_text(json.dumps(cache,ensure_ascii=False,indent=2),encoding="utf-8")
     ok=0
