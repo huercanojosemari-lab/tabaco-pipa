@@ -1,4 +1,5 @@
 import html, json, re
+from urllib.parse import urljoin
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -63,7 +64,7 @@ def parse_brand(brand,url):
         out[name.casefold()]={"id":f"tr-{slug(brand)}-{slug(name)}","nombre":name,"marca":brand,
             "resenas":reviews,"valoracion":rating,"tipo":blend_type,"pais":"","corte":"","fuerza":"",
             "aromatizacion":"","fuente":"TobaccoReviews","imagen":None,"imagen_fuente":None,
-            "fuente_url":url.rstrip("/")+"/"+""}
+            "fuente_url":url,"fuente_blend_url":urljoin(url, html.unescape(m.group(1)))}
     return list(out.values())
 
 def main():
