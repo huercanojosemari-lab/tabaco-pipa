@@ -1,10 +1,10 @@
 {
   "version": "8.0.0",
-  "updated": "2026-09-18T04:57:05Z",
+  "updated": "2026-09-18T05:24:37Z",
   "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
   "source_scope": "Marcas derivadas de las mezclas realmente cargadas en el índice local; no representa disponibilidad comercial.",
-  "total_marcas_cargadas": 122,
-  "total_blends_cargados": 657,
+  "total_marcas_cargadas": 124,
+  "total_blends_cargados": 2392,
   "total_marcas_referencia": 667,
   "total_blends_referencia": 8582,
   "marcas": [
@@ -15,7 +15,7 @@
     },
     {
       "marca": "A&C Petersen",
-      "blends": 3,
+      "blends": 15,
       "resenas": 0
     },
     {
@@ -110,7 +110,7 @@
     },
     {
       "marca": "Cornell & Diehl",
-      "blends": 41,
+      "blends": 385,
       "resenas": 0
     },
     {
@@ -120,7 +120,7 @@
     },
     {
       "marca": "Dan Tobacco",
-      "blends": 22,
+      "blends": 135,
       "resenas": 0
     },
     {
@@ -140,7 +140,7 @@
     },
     {
       "marca": "Dunhill",
-      "blends": 22,
+      "blends": 82,
       "resenas": 0
     },
     {
@@ -171,6 +171,11 @@
     {
       "marca": "Esoterica",
       "blends": 7,
+      "resenas": 0
+    },
+    {
+      "marca": "Esoterica Tobacciana",
+      "blends": 18,
       "resenas": 0
     },
     {
@@ -215,12 +220,12 @@
     },
     {
       "marca": "Gawith & Hoggarth & Co",
-      "blends": 21,
+      "blends": 7,
       "resenas": 0
     },
     {
       "marca": "Gawith, Hoggarth & Co.",
-      "blends": 1,
+      "blends": 248,
       "resenas": 0
     },
     {
@@ -335,12 +340,12 @@
     },
     {
       "marca": "Mac Baren",
-      "blends": 32,
-      "resenas": 413
+      "blends": 142,
+      "resenas": 0
     },
     {
       "marca": "McClelland",
-      "blends": 55,
+      "blends": 255,
       "resenas": 0
     },
     {
@@ -405,7 +410,7 @@
     },
     {
       "marca": "Peterson",
-      "blends": 10,
+      "blends": 82,
       "resenas": 0
     },
     {
@@ -449,8 +454,13 @@
       "resenas": 0
     },
     {
+      "marca": "Rattray's",
+      "blends": 47,
+      "resenas": 0
+    },
+    {
       "marca": "Rattray’s",
-      "blends": 6,
+      "blends": 2,
       "resenas": 0
     },
     {
@@ -480,7 +490,7 @@
     },
     {
       "marca": "Samuel Gawith",
-      "blends": 23,
+      "blends": 127,
       "resenas": 0
     },
     {
@@ -495,7 +505,7 @@
     },
     {
       "marca": "Seattle Pipe Club",
-      "blends": 1,
+      "blends": 33,
       "resenas": 0
     },
     {
@@ -520,7 +530,7 @@
     },
     {
       "marca": "Sutliff Tobacco Company",
-      "blends": 1,
+      "blends": 368,
       "resenas": 0
     },
     {
@@ -605,7 +615,7 @@
     },
     {
       "marca": "Wessex",
-      "blends": 4,
+      "blends": 31,
       "resenas": 0
     },
     {
