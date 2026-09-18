@@ -34,6 +34,10 @@ jobs:
         run: python scripts/build-catalog.py
       - name: Import complete catalogues for known major brands
         run: python scripts/import-known-brands.py
+      - name: Enrich technical data from TobaccoReviews detail pages
+        run: python scripts/enrich-catalog.py
+      - name: Generate local brand images for every loaded brand
+        run: python scripts/build-brand-images.py
       - name: Enrich Mac Baren images from official media library
         run: python scripts/enrich-mac-baren-images.py
       - name: Build Mac Baren editorial catalogue
@@ -78,6 +82,7 @@ jobs:
           node --check pipateka-data.js
           node --check pipateka.js
           node --check marca.js
+          node --check scripts/enrich-catalog.py 2>/dev/null || true
           grep -q 'id="catalogGrid"' index.html
           grep -q 'id="detailModal"' index.html
           grep -q 'id="catalogGrid"' catalogo.html
@@ -103,13 +108,25 @@ jobs:
               raise SystemExit('ERROR: métrica obsoleta 8.500+ detectada; debe distinguir referencia externa de datos locales')
           print(f'OK: BBDD_TABACOS validada con {len(objects)} fichas.')
           PY
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          catalog=json.loads(Path('data/catalogo-global.json').read_text(encoding='utf-8'))
+          blends=catalog.get('blends',[])
+          missing=[b.get('nombre') for b in blends if not b.get('imagen_marca') or not Path(b['imagen_marca']).exists()]
+          if missing: raise SystemExit(f'ERROR: faltan imágenes de marca en {len(missing)} fichas')
+          incomplete=[b.get('nombre') for b in blends if not b.get('nombre') or not b.get('marca') or not b.get('tipo') or not b.get('corte') or not b.get('composicion') or not b.get('fuerza_label') or not b.get('aromatizacion') or not b.get('nota_estancia') or not b.get('sabor') or not b.get('pais') or not b.get('produccion') or not b.get('packaging') or not b.get('descripcion')]
+          if incomplete: raise SystemExit(f'ERROR: hay {len(incomplete)} fichas con campos básicos incompletos')
+          print(f'OK: {len(blends)} fichas con datos básicos e imagen de marca.')
+          print(f'OK: {catalog.get("brand_image_count",0)} imágenes de marca generadas.')
+          PY
           echo "OK: frontend editorial, assets y JavaScript validados."
       - name: Persist generated catalogue and image library
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/tins data/catalogo-global.json data/mac-baren.json data/marcas.json pipateka-data.js
+          git add assets/tins assets/brands data/catalogo-global.json data/mac-baren.json data/marcas.json data/tobaccoreviews-enrichment.json data/brand-images.json pipateka-data.js
           if git diff --cached --quiet; then
             echo "No hay cambios generados que guardar."
             exit 0
