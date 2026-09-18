@@ -29,18 +29,66 @@ CUT_HINTS = [
 def clean(v):
     return re.sub(r"\s+", " ", html.unescape(v or "")).strip()
 
-def fetch(url, timeout=25, attempts=3):
+def fetch_direct(url, timeout=7, attempts=2):
     last=None
     for attempt in range(1, attempts+1):
         try:
-            req = Request(url, headers={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36 PipatekaCatalog/2.0","Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"en-US,en;q=0.9"})
-            return urlopen(req, timeout=timeout).read().decode("utf-8", "ignore")
-        except (HTTPError, URLError, TimeoutError) as exc:
+            req=Request(url,headers={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36 PipatekaCatalog/3.0","Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"en-US,en;q=0.9"})
+            return urlopen(req,timeout=timeout).read().decode("utf-8","ignore")
+        except (HTTPError,URLError,TimeoutError) as exc:
             last=exc
-            if isinstance(exc, HTTPError) and exc.code not in (408,429,500,502,503,504):
-                break
-            time.sleep((attempt * 2) + random.random())
-    raise last or RuntimeError("unknown fetch error")
+            if isinstance(exc,HTTPError) and exc.code not in (408,429,500,502,503,504): break
+            time.sleep((attempt*1.5)+random.random())
+    raise last or RuntimeError("unknown direct fetch error")
+
+def fetch_jina(url, timeout=18, attempts=2):
+    target="https://r.jina.ai/http://"+url.split("://",1)[-1]
+    last=None
+    for attempt in range(1, attempts+1):
+        try:
+            req=Request(target,headers={"User-Agent":"PipatekaCatalog/3.0","Accept":"text/plain,text/markdown,*/*"})
+            return urlopen(req,timeout=timeout).read().decode("utf-8","ignore")
+        except (HTTPError,URLError,TimeoutError) as exc:
+            last=exc
+            if isinstance(exc,HTTPError) and exc.code not in (408,429,500,502,503,504): break
+            time.sleep((attempt*2)+random.random())
+    raise last or RuntimeError("unknown proxy fetch error")
+
+def parse_markdown(source):
+    lines=[clean(x) for x in source.splitlines() if clean(x)]
+    plain="\n".join(lines)
+    details={}
+    for line in lines:
+        m=re.match(r"\|\s*([^|]+?)\s*\|\s*([^|]+?)\s*\|",line)
+        if m:
+            details[clean(m.group(1)).casefold()]=clean(m.group(2))
+    def profile(label,next_labels):
+        pattern=r"\b"+re.escape(label)+r"\s+(.+?)\s+(?=\b(?:"+ "|".join(map(re.escape,next_labels)) +r")\b|$)"
+        m=re.search(pattern,plain,flags=re.I|re.S)
+        return clean(m.group(1)) if m else ""
+    avg=re.search(r"Average Rating\s+(\d+(?:\.\d+)?)\s*/\s*4\s+([\d,]+)\s+reviews",plain,flags=re.I)
+    return {
+        "titulo":next((x for x in lines if x.lower().startswith("# ")), ""),
+        "descripcion":next((x for x in lines if len(x)>=80 and not x.startswith("|") and "Average Rating" not in x and "Please login" not in x), ""),
+        "brand":details.get("brand",""),
+        "blended_by":details.get("blended by",""),
+        "manufactured_by":details.get("manufactured by",""),
+        "blend_type":details.get("blend type",""),
+        "contents":details.get("contents",""),
+        "flavoring":details.get("flavoring",""),
+        "cut":details.get("cut",""),
+        "packaging":details.get("packaging",""),
+        "country":details.get("country",""),
+        "production":details.get("production",""),
+        "strength":profile("Strength",["Flavoring","Room Note","Taste","Average Rating"]),
+        "profile_flavoring":profile("Flavoring",["Room Note","Taste","Average Rating"]),
+        "room_note":profile("Room Note",["Taste","Average Rating"]),
+        "taste":profile("Taste",["Average Rating"]),
+        "average":float(avg.group(1)) if avg else "",
+        "reviews":int(avg.group(2).replace(",","")) if avg else 0,
+    }
+
+
 
 class PageParser(HTMLParser):
     def __init__(self):
@@ -154,8 +202,15 @@ def main():
         if cached and cached.get('ok'):
             return key, cached
         try:
-            page=fetch(url)
-            parsed=parse_page(page)
+            try:
+                page=fetch_direct(url)
+                parsed=parse_page(page)
+                parsed["fetch_mode"]="direct"
+            except Exception as direct_exc:
+                page=fetch_jina(url)
+                parsed=parse_markdown(page)
+                parsed["fetch_mode"]="jina"
+                parsed["direct_error"]=str(direct_exc)
             parsed["url"]=url; parsed["ok"]=True
             return key, parsed
         except Exception as exc:
