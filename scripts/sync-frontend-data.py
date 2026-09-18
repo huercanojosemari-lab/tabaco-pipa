@@ -43,7 +43,7 @@ def make(row):
     cut=str(row.get("corte") or "").strip() or "No especificado en la fuente"
     country=str(row.get("pais") or "").strip() or "No especificado en la fuente"
     flavor=str(row.get("aromatizacion") or "").strip()
-    strength_text=str(row.get("fuerza_text") or row.get("fuerza") or "").strip()
+    strength_text=str(row.get("fuerza_label") or row.get("fuerza_text") or row.get("fuerza") or "").strip()
     comp=row.get("composicion")
     if isinstance(comp,list): comp=", ".join(map(str,comp))
     comp=str(comp or "").strip() or "No especificada en la fuente"
@@ -55,11 +55,16 @@ def make(row):
     return {
         "id":row.get("id") or f"tr-{slugify(brand)}-{slugify(name)}",
         "nombre":name,"marca":brand,"tipo":typ,"corte":cut,
-        "fuerza":strength_num(strength_text),"fuerza_text":strength_text or "No especificada en la fuente",
+        "fuerza":strength_num(strength_text),"fuerza_label":strength_text or "No especificada en la fuente",
         "aroma":aroma,"aromatizacion":flavor or "No especificada en la fuente",
+        "nota_estancia":str(row.get("nota_estancia") or "").strip() or "No especificada en la fuente",
+        "sabor":str(row.get("sabor") or "").strip() or "No especificado en la fuente",
         "composicion":comp,"pais":country,
         "valoracion":row.get("valoracion"),"popularidad":pop(row.get("resenas"),row.get("valoracion")),
         "disponibilidad":availability,"produccion":production or "No especificada en la fuente",
+        "packaging":str(row.get("packaging") or "").strip() or "No especificado en la fuente",
+        "mezclado_por":str(row.get("mezclado_por") or "").strip() or "No especificado en la fuente",
+        "fabricante":str(row.get("fabricante") or "").strip() or "No especificado en la fuente",
         "descripcion":desc,"reseña_pipateka":f"Ficha documental de {name}: combina los campos estructurados disponibles de la fuente y no sustituye las reseñas literales de usuarios.",
         "imagen":row.get("imagen") or "assets/tins/editorial-tin.svg",
         "imagen_marca":row.get("imagen_marca") or f"assets/brands/{slugify(brand)}.svg",
