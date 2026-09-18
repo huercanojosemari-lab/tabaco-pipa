@@ -1,7 +1,9 @@
 (() => {
   'use strict';
   // La portada trabaja solo con la BBDD editorial. El catálogo completo vive en catalogo.html.
-  const state = { all:[...BBDD_TABACOS], query:'', type:'', sort:'popularidad' };
+  const EDITORIAL_IDS = ['peterson-nightcap','peterson-early-morning-pipe','samuel-gawith-1792-flake','ashton-winding-road','rattrays-black-mallory','mac-baren-navy-flake','mac-baren-plumcake','mac-baren-dark-twist','mac-baren-club-blend','peterson-university-flake','samuel-gawith-full-virginia-flake','samuel-gawith-hh-latakia-flake'];
+  const isFullCatalog = document.body.classList.contains('catalog-page');
+  const state = { all:[...BBDD_TABACOS].filter(item=>isFullCatalog || EDITORIAL_IDS.includes(item.id)), query:'', type:'', sort:'popularidad' };
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const normalize=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
