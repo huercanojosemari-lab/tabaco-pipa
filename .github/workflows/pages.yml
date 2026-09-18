@@ -44,10 +44,6 @@ jobs:
         run: python scripts/build-mac-baren.py
       - name: Build brands from loaded catalogue
         run: python scripts/build-brands.py
-      - name: Enrich blend details from individual source pages
-        run: python scripts/enrich-blend-details.py
-      - name: Generate visual identity assets for every loaded brand
-        run: python scripts/generate-brand-assets.py
       - name: Sync frontend catalogue from generated index
         run: python scripts/sync-frontend-data.py
       - name: Validate generated catalogue
