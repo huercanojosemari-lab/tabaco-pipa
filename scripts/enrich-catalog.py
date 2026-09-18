@@ -29,9 +29,18 @@ CUT_HINTS = [
 def clean(v):
     return re.sub(r"\\s+", " ", html.unescape(v or "")).strip()
 
-def fetch(url, timeout=8):
-    req = Request(url, headers={"User-Agent": "Mozilla/5.0 PipatekaEnricher/1.0", "Accept": "text/html,application/xhtml+xml"})
-    return urlopen(req, timeout=timeout).read().decode("utf-8", "ignore")
+def fetch(url, timeout=25, attempts=3):
+    last=None
+    for attempt in range(1, attempts+1):
+        try:
+            req = Request(url, headers={"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/140.0 Safari/537.36 PipatekaCatalog/2.0","Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8","Accept-Language":"en-US,en;q=0.9"})
+            return urlopen(req, timeout=timeout).read().decode("utf-8", "ignore")
+        except (HTTPError, URLError, TimeoutError) as exc:
+            last=exc
+            if isinstance(exc, HTTPError) and exc.code not in (408,429,500,502,503,504):
+                break
+            time.sleep((attempt * 2) + random.random())
+    raise last or RuntimeError("unknown fetch error")
 
 class PageParser(HTMLParser):
     def __init__(self):
