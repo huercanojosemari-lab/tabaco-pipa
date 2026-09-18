@@ -4,8 +4,8 @@ const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function imageMarkup(b){
   const title=`${b.marca||''} ${b.nombre||''}`;
-  const local=b.imagen||'assets/tins/editorial-tin.svg';
-  return `<div class="blend-thumb"><img loading="lazy" alt="${esc(title)}" title="${esc(title)}" src="${esc(local)}" onerror="this.onerror=null;this.src='assets/tins/editorial-tin.svg'"><span class="image-source">Imagen local</span></div>`;
+  const local=b.imagen_marca||b.imagen||'assets/tins/editorial-tin.svg';
+  return `<div class="blend-thumb"><img loading="lazy" alt="${esc(title)}" title="${esc(title)}" src="${esc(local)}" onerror="this.onerror=null;this.src='assets/tins/editorial-tin.svg'"><span class="image-source">Imagen de marca</span></div>`;
 }
 function description(b){
   if(b.descripcion) return b.descripcion;
