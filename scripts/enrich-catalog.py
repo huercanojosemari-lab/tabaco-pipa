@@ -27,7 +27,7 @@ CUT_HINTS = [
 ]
 
 def clean(v):
-    return re.sub(r"\\s+", " ", html.unescape(v or "")).strip()
+    return re.sub(r"\s+", " ", html.unescape(v or "")).strip()
 
 def fetch(url, timeout=25, attempts=3):
     last=None
@@ -97,7 +97,7 @@ def parse_page(source):
     plain=re.sub(r"<style[^>]*>.*?</style>", " ", plain, flags=re.I|re.S)
     plain=clean(re.sub(r"<[^>]+>", "\n", plain))
     def profile(label, stop):
-        m=re.search(rf"{re.escape(label)}\\s+(.+?)\\s+{re.escape(stop)}", plain, flags=re.I|re.S)
+        m=re.search(rf"{re.escape(label)}\s+(.+?)\s+{re.escape(stop)}", plain, flags=re.I|re.S)
         return clean(m.group(1)) if m else ""
     return {
         "titulo": parser.h1[0] if parser.h1 else "",
@@ -112,16 +112,16 @@ def parse_page(source):
         "packaging": details.get("packaging",""),
         "country": details.get("country",""),
         "production": details.get("production",""),
-        "strength": profile("Strength", "Extremely Mild \\-> Overwhelming"),
-        "profile_flavoring": profile("Flavoring", "None Detected \\-> Extra Strong"),
-        "room_note": profile("Room Note", "Unnoticeable \\-> Overwhelming"),
-        "taste": profile("Taste", "Extremely Mild \\(Flat\\) \\-> Overwhelming"),
+        "strength": profile("Strength", "Extremely Mild \-> Overwhelming"),
+        "profile_flavoring": profile("Flavoring", "None Detected \-> Extra Strong"),
+        "room_note": profile("Room Note", "Unnoticeable \-> Overwhelming"),
+        "taste": profile("Taste", "Extremely Mild \(Flat\) \-> Overwhelming"),
         "average": "",
         "reviews": 0,
     } | parse_average(plain)
 
 def parse_average(plain):
-    m=re.search(r"Average Rating\\s+(\\d+(?:\\.\\d+)?)\\s*/\\s*4\\s+([\\d,]+)\\s+reviews", plain, flags=re.I)
+    m=re.search(r"Average Rating\s+(\d+(?:\.\d+)?)\s*/\s*4\s+([\d,]+)\s+reviews", plain, flags=re.I)
     return {"average": float(m.group(1)) if m else "", "reviews": int(m.group(2).replace(",","")) if m else 0}
 
 def cut_from_name(name):
