@@ -27,7 +27,7 @@ CUT_HINTS = [
 def clean(v):
     return re.sub(r"\\s+", " ", html.unescape(v or "")).strip()
 
-def fetch(url, timeout=35):
+def fetch(url, timeout=14):
     req = Request(url, headers={"User-Agent": "Mozilla/5.0 PipatekaEnricher/1.0", "Accept": "text/html,application/xhtml+xml"})
     return urlopen(req, timeout=timeout).read().decode("utf-8", "ignore")
 
@@ -148,7 +148,7 @@ def main():
         except Exception as exc:
             return key, {"url":url,"ok":False,"error":str(exc)}
     done=0
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as pool:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=24) as pool:
         for key,parsed in pool.map(work, targets):
             cache[key]=parsed; done+=1
             if done%100==0: print(f"Enrichment: {done}/{len(targets)}")
