@@ -1,1 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 257" role="img" aria-labelledby="title desc"><title id="title">Pipateka</title><desc id="desc">Logotipo oficial de Pipateka: pipa y libro abierto en dorado.</desc><image href="pipateka-logo.jpg" x="0" y="0" width="420" height="257" preserveAspectRatio="xMidYMid meet"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" role="img" aria-labelledby="title desc">
+  <title id="title">Pipateka</title>
+  <desc id="desc">Logotipo de Pipateka con una pipa clásica, humo y el nombre de la enciclopedia.</desc>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="72%">
+      <stop offset="0" stop-color="#352116"/>
+      <stop offset="0.58" stop-color="#18100c"/>
+      <stop offset="1" stop-color="#070605"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" x2="1">
+      <stop offset="0" stop-color="#9d682f"/>
+      <stop offset="0.5" stop-color="#f0d58a"/>
+      <stop offset="1" stop-color="#b27b36"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a130b"/>
+      <stop offset="0.45" stop-color="#b76a35"/>
+      <stop offset="0.75" stop-color="#5f301c"/>
+      <stop offset="1" stop-color="#1a0e09"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="9" stdDeviation="10" flood-color="#000" flood-opacity=".72"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="460" rx="18" fill="url(#bg)"/>
+  <ellipse cx="450" cy="184" rx="248" ry="128" fill="#c38b42" opacity=".12" filter="url(#soft)"/>
+  <path d="M214 209 A236 174 0 0 1 686 209" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M262 297 H350" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M550 297 H638" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+
+  <g filter="url(#shadow)">
+    <path d="M328 194
+             C309 177 302 152 309 126
+             C317 96 339 82 365 87
+             C391 92 405 113 404 140
+             C403 156 398 174 390 191
+             C374 225 342 224 328 194 Z"
+          fill="url(#wood)" stroke="#dbab63" stroke-width="3"/>
+    <path d="M387 155
+             C419 168 449 171 487 154
+             C521 139 555 118 596 95
+             C614 85 631 84 645 91
+             C652 95 654 101 648 106
+             C631 117 614 121 596 130
+             C563 147 529 166 493 187
+             C457 208 415 226 377 210
+             C362 204 351 196 346 184 Z"
+          fill="#120e0d" stroke="#b77a39" stroke-width="4"/>
+    <path d="M483 154 C490 165 503 175 514 177 L528 166 L500 146 Z" fill="#d6a052" opacity=".95"/>
+    <ellipse cx="356" cy="102" rx="55" ry="17" fill="#100c09" stroke="#e1b66d" stroke-width="4"/>
+    <ellipse cx="356" cy="103" rx="38" ry="10" fill="#050403"/>
+  </g>
+
+  <path d="M379 79 C405 58 394 37 416 19
+           C434 5 445 18 439 34
+           C430 56 463 63 448 82
+           C437 96 414 89 405 104"
+        fill="none" stroke="#f4e2b0" stroke-width="8" stroke-linecap="round" opacity=".95"/>
+  <path d="M411 84 C431 67 425 52 443 40" fill="none" stroke="#c9964b" stroke-width="4" opacity=".75"/>
+
+  <text x="450" y="284" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="102" font-weight="700" letter-spacing="4" fill="#f6e7bf">PIPATEKA</text>
+  <text x="450" y="330" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" letter-spacing="7" fill="#d9ad62">TABACO · PIPAS · ACCESORIOS</text>
+  <path d="M285 355 Q450 390 615 355" fill="none" stroke="#7d5026" stroke-width="2" opacity=".9"/>
+  <circle cx="450" cy="380" r="4" fill="#d7ab61"/>
+</svg>
