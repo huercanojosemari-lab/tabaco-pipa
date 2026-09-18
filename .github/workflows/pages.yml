@@ -86,7 +86,7 @@ jobs:
           from pathlib import Path
           data = Path('pipateka-data.js').read_text(encoding='utf-8')
           required = ['id','nombre','marca','tipo','corte','fuerza','aroma','composicion','valoracion','popularidad','disponibilidad','imagen','reseñas']
-          objects = re.findall(r'\{\s*id:', data)
+          objects = re.findall(r'\{\s*[\"\']id[\"\']\s*:', data)
           if len(objects) < 1000:
               raise SystemExit(f'ERROR: BBDD_TABACOS no contiene el catálogo ampliado: {len(objects)} fichas')
           for field in required:
