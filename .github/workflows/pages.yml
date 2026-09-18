@@ -44,6 +44,10 @@ jobs:
         run: python scripts/build-mac-baren.py
       - name: Build brands from loaded catalogue
         run: python scripts/build-brands.py
+      - name: Enrich blend details from individual source pages
+        run: python scripts/enrich-blend-details.py
+      - name: Generate visual identity assets for every loaded brand
+        run: python scripts/generate-brand-assets.py
       - name: Sync frontend catalogue from generated index
         run: python scripts/sync-frontend-data.py
       - name: Validate generated catalogue
@@ -62,6 +66,7 @@ jobs:
           if mac.get('marca') != 'Mac Baren' or len(mac_rows) < 100: raise SystemExit('ERROR: Mac Baren incompleto')
           if len(loaded_brands) < 100: raise SystemExit(f'ERROR: índice de marcas incompleto: {len(loaded_brands)}')
           if len(blends) < 1000: raise SystemExit(f'ERROR: catálogo global inesperadamente pequeño: {len(blends)}')
+          if any(not b.get('marca') or not b.get('nombre') for b in blends): raise SystemExit('ERROR: hay fichas sin marca o nombre')
           required_known = {'Mac Baren':100,'Peterson':60,'Samuel Gawith':80,'Cornell & Diehl':250,'Gawith, Hoggarth & Co.':150,'Dan Tobacco':80,'Sutliff Tobacco Company':250,"Rattray's":30,'Dunhill':40,'Esoterica Tobacciana':15,'McClelland':150,'Seattle Pipe Club':25,'Wessex':20,'A&C Petersen':10}
           known_sources = catalog.get('known_brand_sources', {})
           missing_known=[f'{b} ({known_sources.get(b,0)})' for b,m in required_known.items() if int(known_sources.get(b,0) or 0)<m]
@@ -82,6 +87,7 @@ jobs:
           node --check pipateka-data.js
           node --check pipateka.js
           node --check marca.js
+          test -d assets/brands || { echo "ERROR: falta assets/brands"; exit 1; }
           grep -q 'id="catalogGrid"' index.html
           grep -q 'id="detailModal"' index.html
           grep -q 'id="catalogGrid"' catalogo.html
@@ -102,10 +108,14 @@ jobs:
                   raise SystemExit(f'ERROR: falta el campo requerido {field} en BBDD_TABACOS')
           if data.count('"reseñas"') < 1000:
               raise SystemExit('ERROR: faltan arrays de reseñas en BBDD_TABACOS')
+          if data.count('"imagen_marca"') < 1000:
+              raise SystemExit('ERROR: faltan imágenes de marca en BBDD_TABACOS')
           html = Path('index.html').read_text(encoding='utf-8')
           if '8.500+' in html or '8500+' in html:
               raise SystemExit('ERROR: métrica obsoleta 8.500+ detectada; debe distinguir referencia externa de datos locales')
-          print(f'OK: BBDD_TABACOS validada con {len(objects)} fichas.')
+          brand_files = list(Path('assets/brands').glob('*.svg'))
+          if len(brand_files) < 100: raise SystemExit(f'ERROR: biblioteca de marcas incompleta: {len(brand_files)} SVG')
+          print(f'OK: BBDD_TABACOS validada con {len(objects)} fichas y {len(brand_files)} imágenes de marca.')
           PY
           python - <<'PY'
           import json
