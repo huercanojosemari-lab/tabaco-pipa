@@ -6,6 +6,8 @@ import time
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
+import random
 
 CATALOG = Path("data/catalogo-global.json")
 CACHE = Path("data/tobaccoreviews-enrichment.json")
