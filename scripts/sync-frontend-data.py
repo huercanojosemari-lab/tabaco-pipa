@@ -3,6 +3,7 @@ from pathlib import Path
 
 CATALOG=Path("data/catalogo-global.json")
 FRONTEND=Path("pipateka-data.js")
+EDITORIAL_IDS={'peterson-nightcap','peterson-early-morning-pipe','samuel-gawith-1792-flake','ashton-winding-road','rattrays-black-mallory','mac-baren-navy-flake','mac-baren-plumcake','mac-baren-dark-twist','mac-baren-club-blend','peterson-university-flake','samuel-gawith-full-virginia-flake','samuel-gawith-hh-latakia-flake'}
 
 def old_rows():
     if not FRONTEND.exists(): return {}
@@ -82,7 +83,7 @@ def main():
         row=make(raw)
         k=(row["marca"].casefold(),row["nombre"].casefold())
         prev=old.get(k)
-        if prev:
+        if prev and prev.get("id") in EDITORIAL_IDS:
             for f,v in prev.items():
                 if v not in ("",None,[],{}): row[f]=v
             row["imagen_marca"]=f"assets/brands/{slugify(row['marca'])}.svg"
