@@ -107,7 +107,7 @@ $('logoutButton')?.addEventListener('click', async () => {
 if (supabase) {
   supabase.auth.onAuthStateChange(async (event, session) => {
     await refreshSession();
-    if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && /registro\.html|login\.html/.test(window.location.pathname)) {
+    if (event === 'SIGNED_IN' && session && /registro\.html|login\.html/.test(window.location.pathname)) {
       const hash = window.location.hash || '';
       if (!hash.includes('access_token') && !window.location.search.includes('code=')) window.location.replace(homeUrl());
     }
