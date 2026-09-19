@@ -1,9 +1,9 @@
 {
   "version": "8.0.0",
-  "updated": "2026-09-19T00:32:34Z",
+  "updated": "2026-09-19T09:37:33Z",
   "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
   "source_scope": "Marcas derivadas de las mezclas realmente cargadas en el índice local; no representa disponibilidad comercial.",
-  "total_marcas_cargadas": 125,
+  "total_marcas_cargadas": 126,
   "total_blends_cargados": 2392,
   "total_marcas_referencia": 667,
   "total_blends_referencia": 8582,
@@ -459,8 +459,13 @@
       "resenas": 0
     },
     {
+      "marca": "Rattray",
+      "blends": 13,
+      "resenas": 0
+    },
+    {
       "marca": "Rattray's",
-      "blends": 47,
+      "blends": 34,
       "resenas": 0
     },
     {
