@@ -90,7 +90,7 @@ jobs:
           grep -q 'id="detailModal"' catalogo.html
           grep -q 'pipateka-data.js' marca.html
           grep -q "typeof BBDD_TABACOS" marca.js
-          grep -q "EDITORIAL_IDS.includes(item.id)" pipateka.js
+          grep -q "isEditorialItem(item)" pipateka.js
           python - <<'PY'
           import re
           from pathlib import Path
