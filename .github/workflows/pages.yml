@@ -84,7 +84,7 @@ jobs:
           node --check pipateka.js
           node --check marca.js
           test -d assets/brands || { echo "ERROR: falta assets/brands"; exit 1; }
-          grep -q 'id="catalogGrid"' index.html
+          grep -q 'id="featuredGrid"' index.html
           grep -q 'id="detailModal"' index.html
           grep -q 'id="catalogGrid"' catalogo.html
           grep -q 'id="detailModal"' catalogo.html
