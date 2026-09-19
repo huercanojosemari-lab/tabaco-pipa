@@ -1,9 +1,10 @@
 (() => {
   'use strict';
   // La portada trabaja solo con la BBDD editorial. El catálogo completo vive en catalogo.html.
-  const EDITORIAL_IDS = ['peterson-nightcap','peterson-early-morning-pipe','samuel-gawith-1792-flake','ashton-winding-road','rattrays-black-mallory','mac-baren-navy-flake','mac-baren-plumcake','mac-baren-dark-twist','mac-baren-club-blend','peterson-university-flake','samuel-gawith-full-virginia-flake','samuel-gawith-hh-latakia-flake'];
+  const EDITORIAL_ITEMS = [['Peterson','Nightcap'],['Peterson','Early Morning Pipe'],['Samuel Gawith','1792 Flake'],['Ashton','Winding Road'],["Rattray's",'Black Mallory'],['Mac Baren','Navy Flake'],['Mac Baren','Plumcake'],['Mac Baren','Dark Twist'],['Mac Baren','Club Blend'],['Peterson','University Flake'],['Samuel Gawith','Full Virginia Flake'],['Samuel Gawith','HH Latakia Flake']];
+  const isEditorialItem = item => EDITORIAL_ITEMS.some(([brand,name]) => normalize(item.marca)===normalize(brand) && normalize(item.nombre)===normalize(name));
   const isFullCatalog = document.body.classList.contains('catalog-page');
-  const state = { all:[...BBDD_TABACOS].filter(item=>isFullCatalog || EDITORIAL_IDS.includes(item.id)), query:'', type:'', sort:'popularidad' };
+  const state = { all:[...BBDD_TABACOS].filter(item=>isFullCatalog || isEditorialItem(item)), query:'', type:'', sort:'popularidad' };
   const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
   const normalize=v=>String(v??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
