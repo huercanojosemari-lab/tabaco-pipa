@@ -159,6 +159,40 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: .
+      - name: Limpiar despliegues Pages anteriores antes de publicar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, urllib.request
+          repo=os.environ["GITHUB_REPOSITORY"]
+          token=os.environ["GH_TOKEN"]
+          req=urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/pages/deployments?per_page=20",
+              headers={"Accept":"application/vnd.github+json","Authorization":f"Bearer {token}"}
+          )
+          with urllib.request.urlopen(req, timeout=20) as response:
+              deployments=json.load(response)
+          current_sha=os.environ["GITHUB_SHA"]
+          for deployment in deployments:
+              sha=deployment.get("sha") or deployment.get("commit") or ""
+              status=str(deployment.get("status","")).lower()
+              if sha != current_sha and status in {"queued","in_progress"}:
+                  deployment_id=deployment.get("id") or sha
+                  print(f"Cancelando despliegue Pages anterior: {deployment_id} ({status})")
+                  cancel=urllib.request.Request(
+                      f"https://api.github.com/repos/{repo}/pages/deployments/{deployment_id}/cancel",
+                      method="POST",
+                      headers={"Accept":"application/vnd.github+json","Authorization":f"Bearer {token}"}
+                  )
+                  try:
+                      with urllib.request.urlopen(cancel, timeout=20) as response:
+                          print(f"Cancelado: HTTP {response.status}")
+                  except Exception as exc:
+                      print(f"No se pudo cancelar {deployment_id}: {exc}")
+          print("Limpieza de despliegues Pages anteriores completada.")
+          PY
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5
