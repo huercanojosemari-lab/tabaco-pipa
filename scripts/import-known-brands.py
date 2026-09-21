@@ -67,14 +67,42 @@ def parse_brand(brand,url):
             "fuente_url":url,"fuente_blend_url":urljoin(url, html.unescape(m.group(1)))}
     return list(out.values())
 
+
+def discover_brand_pages():
+    """Descubre las fichas de marca de TobaccoReviews."""
+    found={}
+    for page in range(1, 35):
+        url = "https://www.tobaccoreviews.com/browse/" if page == 1 else f"https://www.tobaccoreviews.com/browse?pagenumber={page}"
+        try:
+            text = fetch(url)
+        except Exception as exc:
+            print(f"Warning browse page {page}: {exc}")
+            continue
+        for href,name_html in re.findall(r'href=["\']([^"\']*/brand/[^"\']+)["\'][^>]*>(.*?)</a>', text, re.I|re.S):
+            name=clean(name_html)
+            href=urljoin("https://www.tobaccoreviews.com/",html.unescape(href))
+            if name and "/brand/" in href:
+                found[bkey(name)] = (name, href)
+        if page % 5 == 0:
+            print(f"Brand directory: page {page}/34 · {len(found)} marcas")
+    return found
+
 def main():
     data=json.loads(CATALOG.read_text(encoding="utf-8"))
     merged={}
     for row in data.get("blends",[]):
         brand=clean(row.get("marca")); name=clean(row.get("nombre"))
         if brand and name: merged[(bkey(brand),name.casefold())]=row
+    brand_pages=discover_brand_pages()
+    all_brand_names=sorted({clean(x.get("marca")) for x in merged.values() if clean(x.get("marca"))}, key=str.casefold)
+    dynamic={}
+    for brand in all_brand_names:
+        match=brand_pages.get(bkey(brand))
+        if match:
+            dynamic[brand]=match[1]
+    sources={**dynamic, **KNOWN_BRANDS}
     counts={}
-    for brand,url in KNOWN_BRANDS.items():
+    for brand,url in sources.items():
         try:
             rows=parse_brand(brand,url)
         except Exception as exc:
@@ -98,6 +126,8 @@ def main():
     data["total_marcas_cargadas"]=len({x.get("marca") for x in rows if x.get("marca")})
     data["known_brand_sources"]=counts
     data["known_brand_total"]=sum(counts.values())
+    data["tobaccoreviews_brand_pages_found"]=len(dynamic)
+    data["tobaccoreviews_brand_pages_total"]=len(brand_pages)
     data["source_scope"]="Índice combinado de Fumeurs de Pipe y listados completos de marcas principales de TobaccoReviews."
     CATALOG.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding="utf-8")
     print("Known brand rows:",counts)
