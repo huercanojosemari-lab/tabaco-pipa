@@ -1,6 +1,6 @@
 {
   "version": "9.0.1",
-  "updated": "2026-09-22T05:18:50Z",
+  "updated": "2026-09-22T09:59:50Z",
   "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
   "source_url": "https://www.fumeursdepipe.net/tabacotheque.php",
   "source_scope": "Índice combinado de Fumeurs de Pipe y listados completos de marcas principales de TobaccoReviews.",
@@ -33192,7 +33192,7 @@
       "aromatizacion": "No especificada en la fuente consultada",
       "fuente": "TobaccoReviews + Pipateka",
       "imagen": null,
-      "imagen_fuente": null,
+      "imagen_fuente": "https://mac-baren.com/wp-content/uploads/2018/09/st-bruno-blends-img-st-bruno-flake-150x150.jpg",
       "fuente_url": "https://www.tobaccoreviews.com/brand/36/mac-baren/",
       "composicion": "No especificada en la fuente consultada",
       "fuerza_label": "No especificada en la fuente consultada",
@@ -64470,7 +64470,7 @@
   "tobaccoreviews_brand_pages_found": 0,
   "tobaccoreviews_brand_pages_total": 0,
   "enrichment_version": "1.0.0",
-  "enrichment_updated": "2026-09-22T05:20:46Z",
+  "enrichment_updated": "2026-09-22T10:01:53Z",
   "enrichment_results": {
     "detail_urls": 1886,
     "pages_ok": 1886
