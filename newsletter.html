@@ -134,11 +134,12 @@ form.addEventListener('submit',async event=>{
   const frequency=document.getElementById('frequency').value;
   if(!document.getElementById('consent').checked)return show('Debes aceptar la suscripción para continuar.','error');
   button.disabled=true;show('Guardando tu suscripción…');
-  const {error}=await supabase.from('newsletter_subscribers').upsert({email,name:name||null,frequency,consent:true},{onConflict:'email',ignoreDuplicates:true});
+  const {error}=await supabase.from('newsletter_subscribers').insert({email,name:name||null,frequency,consent:true});
   button.disabled=false;
   if(error){
     console.error(error);
     if(error.code==='42P01'||error.message?.includes('newsletter_subscribers'))return show('La newsletter está preparada, pero falta crear su tabla en Supabase. En el repositorio encontrarás supabase/newsletter.sql.','error');
+    if(error.code==='23505')return show('Ese correo ya figura suscrito a la newsletter.','success');
     return show('No hemos podido guardar la suscripción. Inténtalo de nuevo.','error');
   }
   form.reset();show('¡Suscripción realizada! Recibirás las novedades de Pipateka.','success');
