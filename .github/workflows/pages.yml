@@ -166,7 +166,7 @@ jobs:
           test -f privacidad.html
           test -f cookies.html
           test -f metodologia.html
-          if grep -RniE '\\[PENDIENTE|TU_NOMBRE|TU_EMAIL|TU_DIRECCION|TU_NIF' aviso-legal.html privacidad.html cookies.html metodologia.html; then
+          if grep -RniE '\\[PENDIENTE\\]|TU_NOMBRE|TU_EMAIL|TU_DIRECCION|TU_NIF' aviso-legal.html privacidad.html cookies.html metodologia.html; then
             echo "ERROR: faltan datos identificativos del responsable en la documentación legal."
             exit 1
           fi
@@ -179,7 +179,27 @@ jobs:
             echo "ERROR: posible lenguaje comercial/promocional detectado en superficies editoriales."
             exit 1
           fi
-          echo "OK: documentación de pre-lanzamiento presente. La identidad del responsable debe estar completada para permitir el despliegue."
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('data/catalogo-global.json').read_text(encoding='utf-8'))
+          blends=data.get('blends',[])
+          invalid=[]
+          no_rating=[]
+          for b in blends:
+              r=b.get('valoracion')
+              if r in (None,'','No disponible'): no_rating.append(b.get('nombre'))
+              else:
+                  try:
+                      x=float(r)
+                      if not 0 <= x <= 4: invalid.append((b.get('nombre'),r))
+                  except Exception: invalid.append((b.get('nombre'),r))
+          if invalid: raise SystemExit(f'ERROR: puntuaciones fuera de rango 0-4 o no numéricas: {len(invalid)}')
+          missing_source=[b.get('nombre') for b in blends if not b.get('fuente_detalle') and not b.get('fuente_blend_url')]
+          if missing_source: raise SystemExit(f'ERROR: fichas sin fuente verificable: {len(missing_source)}')
+          print(f'OK: puntuaciones válidas; {len(no_rating)} fichas sin valoración pública, marcadas como no disponible.')
+          PY
+          echo "OK: validación editorial, técnica y legal superada; queda pendiente exclusivamente la identidad real del responsable para cerrar el pre-lanzamiento."
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5
