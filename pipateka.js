@@ -31,6 +31,14 @@
   function syncToUrl(){if(!document.body.classList.contains('catalog-page'))return;const p=new URLSearchParams();if(state.query)p.set('q',state.query);if(state.type)p.set('type',state.type);if(state.sort&&state.sort!=='popularidad')p.set('sort',state.sort);const url=p.toString()?location.pathname+'?'+p.toString():location.pathname;history.replaceState(null,'',url)}
   function setupControls(){
     const search=$('#mainSearch'),type=$('#typeFilter'),sort=$('#sortSelect');
+    const homeSearch=$('#homeSearch');
+    if(homeSearch){
+      $('#homeSearchButton')?.addEventListener('click',()=>{
+        const q=homeSearch.value.trim();
+        location.href='catalogo.html'+(q?'?q='+encodeURIComponent(q):'');
+      });
+      homeSearch.addEventListener('keydown',e=>{if(e.key==='Enter'){$('#homeSearchButton')?.click()}});
+    }
     syncFromUrl();
     if(search){
       updateSearchSuggestions();
