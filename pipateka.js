@@ -29,6 +29,40 @@
   function searchHint(){const q=normalize(state.query);const hint=$('#searchHint');if(!hint)return;if(!q||filtered().length)return hint.textContent='';const candidates=[...new Set(BBDD_TABACOS.flatMap(x=>[x.marca,x.nombre].filter(Boolean).map(String)))];const best=candidates.map(v=>({v,d:editDistance(q,v)})).sort((a,b)=>a.d-b.d)[0];hint.textContent=best&&best.d<=Math.max(2,Math.floor(q.length/3))?'¿Quizá quisiste decir «'+best.v+'»?':''}
   function syncFromUrl(){const p=new URLSearchParams(location.search);if(p.get('q')!==null)state.query=p.get('q');if(p.get('type')!==null)state.type=p.get('type');if(p.get('sort')!==null)state.sort=p.get('sort')}
   function syncToUrl(){if(!document.body.classList.contains('catalog-page'))return;const p=new URLSearchParams();if(state.query)p.set('q',state.query);if(state.type)p.set('type',state.type);if(state.sort&&state.sort!=='popularidad')p.set('sort',state.sort);const url=p.toString()?location.pathname+'?'+p.toString():location.pathname;history.replaceState(null,'',url)}
-  function setupControls(){const search=$('#mainSearch'),type=$('#typeFilter'),sort=$('#sortSelect');syncFromUrl();if(search){updateSearchSuggestions();search.value=state.query;search.addEventListener('input',e=>{state.query=e.target.value;renderCatalog();renderFeatured();updateMetrics();searchHint();syncToUrl()});$('#searchButton')?.addEventListener('click',()=>{state.query=search.value;renderCatalog();document.querySelector('#catalogo')?.scrollIntoView({behavior:'smooth'});search.focus()})}if(type){const types=[...new Set(BBDD_TABACOS.map(x=>x.tipo))].sort((a,b)=>a.localeCompare(b,'es'));type.innerHTML='<option value="">Todos los tipos</option>'+types.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');type.value=state.type;type.addEventListener('change',e=>{state.type=e.target.value;renderCatalog();syncToUrl()})}if(sort){sort.innerHTML='<option value="popularidad">🔥 Más Populares</option><option value="valoracion">★ Mejor valorados</option><option value="nombre">Nombre (A-Z)</option>';sort.value=state.sort;sort.addEventListener('change',e=>{state.sort=e.target.value;renderCatalog();syncToUrl()})}$('#clearFilters')?.addEventListener('click',()=>{state.query='';state.type='';state.sort='popularidad';if(search)search.value='';if(type)type.value='';if(sort)sort.value='popularidad';renderCatalog();renderFeatured();syncToUrl();$('#mainSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#searchButton')?.click()}});document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)){e.preventDefault();$('#mainSearch')?.focus()}})});$('#modalClose')?.addEventListener('click',closeDetail);$('#detailModal')?.addEventListener('click',e=>{if(e.target.id==='detailModal')closeDetail()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDetail()});renderCatalog();renderFeatured()}
+  function setupControls(){
+    const search=$('#mainSearch'),type=$('#typeFilter'),sort=$('#sortSelect');
+    syncFromUrl();
+    if(search){
+      updateSearchSuggestions();
+      search.value=state.query;
+      search.addEventListener('input',e=>{state.query=e.target.value;renderCatalog();renderFeatured();updateMetrics();searchHint();syncToUrl()});
+      $('#searchButton')?.addEventListener('click',()=>{state.query=search.value;renderCatalog();document.querySelector('#catalogo')?.scrollIntoView({behavior:'smooth'});search.focus();syncToUrl()});
+      search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#searchButton')?.click()}});
+    }
+    if(type){
+      const types=[...new Set(BBDD_TABACOS.map(x=>x.tipo).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+      type.innerHTML='<option value="">Todos los tipos</option>'+types.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+      type.value=state.type;
+      type.addEventListener('change',e=>{state.type=e.target.value;renderCatalog();syncToUrl()});
+    }
+    if(sort){
+      sort.innerHTML='<option value="popularidad">🔥 Más Populares</option><option value="valoracion">★ Mejor valorados</option><option value="nombre">Nombre (A-Z)</option>';
+      sort.value=['popularidad','valoracion','nombre'].includes(state.sort)?state.sort:'popularidad';
+      state.sort=sort.value;
+      sort.addEventListener('change',e=>{state.sort=e.target.value;renderCatalog();syncToUrl()});
+    }
+    $('#clearFilters')?.addEventListener('click',()=>{
+      state.query='';state.type='';state.sort='popularidad';
+      if(search)search.value='';if(type)type.value='';if(sort)sort.value='popularidad';
+      renderCatalog();renderFeatured();searchHint();syncToUrl();
+    });
+    $('#modalClose')?.addEventListener('click',closeDetail);
+    $('#detailModal')?.addEventListener('click',e=>{if(e.target.id==='detailModal')closeDetail()});
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape')closeDetail();
+      if(e.key==='/'&&!/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)){e.preventDefault();$('#mainSearch')?.focus()}
+    });
+    renderCatalog();renderFeatured();updateMetrics();
+  }
   document.addEventListener('DOMContentLoaded',setupControls);
 })();
