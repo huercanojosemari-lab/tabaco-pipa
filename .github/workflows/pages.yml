@@ -2,8 +2,6 @@ name: Deploy Pipateka to GitHub Pages
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '17 5,17 * * *'
   workflow_dispatch:
 permissions:
   contents: write
@@ -166,7 +164,7 @@ jobs:
           test -f privacidad.html
           test -f cookies.html
           test -f metodologia.html
-          if grep -RniE '\\[PENDIENTE\\]|TU_NOMBRE|TU_EMAIL|TU_DIRECCION|TU_NIF' aviso-legal.html privacidad.html cookies.html metodologia.html; then
+          if grep -RniE '\[PENDIENTE\]|TU_NOMBRE|TU_EMAIL|TU_DIRECCION|TU_NIF' aviso-legal.html privacidad.html cookies.html metodologia.html; then
             echo "ERROR: faltan datos identificativos del responsable en la documentación legal."
             exit 1
           fi
