@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-label="Ilustración de una pipa de brezo, tabaco y humo">
+<defs>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3b160d"/><stop offset=".45" stop-color="#9a4f27"/><stop offset="1" stop-color="#2b110a"/></linearGradient>
+<linearGradient id="stem" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#050505"/><stop offset=".55" stop-color="#1c1b1a"/><stop offset="1" stop-color="#050505"/></linearGradient>
+<linearGradient id="bowl" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bd6b35"/><stop offset=".55" stop-color="#713018"/><stop offset="1" stop-color="#2a0e08"/></linearGradient>
+<filter id="shadow"><feGaussianBlur stdDeviation="16"/></filter><filter id="soft"><feGaussianBlur stdDeviation="2"/></filter>
+</defs>
+<ellipse cx="520" cy="610" rx="330" ry="45" fill="#000" opacity=".42" filter="url(#shadow)"/>
+<path d="M420 430C520 425 610 450 680 470C740 488 790 475 842 438L850 463C790 520 715 535 645 510C560 480 500 485 410 495Z" fill="url(#stem)"/>
+<path d="M820 438C835 416 860 412 878 425C888 433 890 448 880 458C865 474 842 470 827 459Z" fill="#050505"/>
+<path d="M325 300C390 285 475 300 520 350C550 384 545 455 500 510C455 564 345 570 285 516C245 480 238 408 260 360C274 330 294 312 325 300Z" fill="url(#bowl)" stroke="#4a1c0f" stroke-width="8"/>
+<ellipse cx="383" cy="312" rx="105" ry="42" fill="#1a0b06" stroke="#8b4725" stroke-width="12"/><ellipse cx="383" cy="308" rx="84" ry="25" fill="#080403"/>
+<path d="M305 325C360 350 430 348 468 323" fill="none" stroke="#d28a48" stroke-width="6" opacity=".5"/>
+<path d="M352 312C350 240 390 180 370 105C355 48 398 25 422 75C450 132 404 184 438 230C468 272 452 309 425 331" fill="none" stroke="#f2eee7" stroke-width="13" opacity=".33" stroke-linecap="round" filter="url(#soft)"/>
+<path d="M360 305C360 240 397 200 387 142C380 105 397 78 412 58" fill="none" stroke="#fff" stroke-width="6" opacity=".2" stroke-linecap="round"/>
+<g opacity=".9"><path d="M80 570C135 535 185 555 210 590C164 602 120 604 80 570Z" fill="#5b2b15"/><path d="M110 610C160 575 210 595 232 628C180 640 140 635 110 610Z" fill="#a75d2d"/><path d="M610 590C665 550 720 565 748 604C700 616 654 614 610 590Z" fill="#633019"/><path d="M660 625C720 586 770 600 795 636C744 651 698 646 660 625Z" fill="#b06a32"/></g>
+<g fill="#d59b5b" opacity=".8"><ellipse cx="145" cy="590" rx="8" ry="4"/><ellipse cx="178" cy="625" rx="7" ry="3"/><ellipse cx="700" cy="590" rx="9" ry="4"/><ellipse cx="760" cy="625" rx="7" ry="3"/></g>
+</svg>
