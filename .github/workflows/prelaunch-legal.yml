@@ -1,0 +1,88 @@
+name: Auditoría legal de pre-lanzamiento
+
+on:
+  workflow_dispatch:
+    inputs:
+      strict:
+        description: "Fallar si quedan datos legales pendientes"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: legal-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Validar documentación legal y carácter editorial
+        env:
+          STRICT: ${{ inputs.strict }}
+        run: |
+          set -euo pipefail
+
+          for file in aviso-legal.html privacidad.html cookies.html metodologia.html; do
+            test -f "$file" || { echo "ERROR: falta $file"; exit 1; }
+          done
+
+          pending=0
+          if grep -RniE '\[PENDIENTE\]|TU_NOMBRE|TU_EMAIL|TU_DIRECCION|TU_NIF' aviso-legal.html privacidad.html cookies.html metodologia.html; then
+            pending=1
+            echo "::warning title=Identidad legal pendiente::La documentación todavía contiene campos de identidad del responsable pendientes."
+          fi
+
+          grep -qi 'no vende tabaco' index.html || { echo "ERROR: index.html no declara que no vende tabaco"; exit 1; }
+          grep -qi 'no vende tabaco' aviso-legal.html || { echo "ERROR: aviso-legal.html no declara que no vende tabaco"; exit 1; }
+          grep -qi 'no vende tabaco' metodologia.html || { echo "ERROR: metodologia.html no declara que no vende tabaco"; exit 1; }
+          grep -qi 'consentimiento' privacidad.html || { echo "ERROR: privacidad.html no documenta consentimiento"; exit 1; }
+          grep -qi 'cookies' cookies.html || { echo "ERROR: cookies.html no contiene la política de cookies"; exit 1; }
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('data/catalogo-global.json').read_text(encoding='utf-8'))
+          blends = data.get('blends', [])
+
+          invalid = []
+          missing_source = []
+          for b in blends:
+              rating = b.get('valoracion')
+              if rating not in (None, '', 'No disponible'):
+                  try:
+                      value = float(rating)
+                  except Exception:
+                      invalid.append((b.get('nombre'), rating))
+                  else:
+                      if not 0 <= value <= 4:
+                          invalid.append((b.get('nombre'), rating))
+              if not b.get('fuente_detalle') and not b.get('fuente_blend_url'):
+                  missing_source.append(b.get('nombre'))
+
+          if invalid:
+              raise SystemExit(f'ERROR: puntuaciones inválidas: {len(invalid)}')
+          if missing_source:
+              raise SystemExit(f'ERROR: fichas sin fuente verificable: {len(missing_source)}')
+
+          print(f'OK: {len(blends)} fichas revisadas; puntuaciones y fuentes válidas.')
+          PY
+
+          if [ "$pending" -eq 1 ]; then
+            if [ "$STRICT" = "true" ]; then
+              echo "ERROR: auditoría estricta bloqueada por identidad legal pendiente."
+              exit 1
+            fi
+            echo "AUDITORÍA INFORMATIVA: quedan datos de identidad pendientes. No se bloquea la ejecución normal."
+          else
+            echo "OK: documentación sin marcadores de identidad pendientes."
+          fi
