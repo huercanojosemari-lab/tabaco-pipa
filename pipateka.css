@@ -67,3 +67,75 @@ button,.btn,a{touch-action:manipulation}
 @media(prefers-reduced-motion:reduce){
   *{scroll-behavior:auto!important;transition:none!important}
 }
+
+/* PORTADA REDISEÑADA · PIPATEKA */
+.home-page{background:var(--paper)}
+.home-page .site-header{position:absolute;left:0;right:0;top:0;background:linear-gradient(180deg,rgba(8,7,6,.78),rgba(8,7,6,.15));border-bottom:1px solid rgba(255,255,255,.08);backdrop-filter:blur(4px)}
+.home-page .topbar{min-height:88px}
+.home-page .brand-logo{width:178px;height:70px}
+.home-page .main-nav a{color:#f5f0e9;padding:32px 0}
+.home-page .main-nav a:after{bottom:22px}
+.home-page .hero{min-height:790px;padding-top:88px;background:#0b0a09;color:#fff;isolation:isolate}
+.home-page .hero:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#090807 0%,#0d0b09 33%,rgba(13,11,9,.82) 51%,rgba(13,11,9,.18) 76%,rgba(8,7,6,.52) 100%);z-index:1}
+.home-page .hero:after{content:'';position:absolute;inset:auto 0 0;height:180px;background:linear-gradient(180deg,transparent,#090807);z-index:2;pointer-events:none}
+.hero-backdrop{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-backdrop:before{content:'';position:absolute;right:0;top:0;width:70%;height:100%;background:radial-gradient(circle at 65% 42%,rgba(179,105,50,.24),transparent 34%),radial-gradient(circle at 82% 70%,rgba(212,175,55,.11),transparent 34%);z-index:1}
+.hero-backdrop img{position:absolute;right:-3%;bottom:-5%;width:min(68vw,940px);height:92%;object-fit:contain;object-position:right bottom;filter:drop-shadow(0 30px 45px rgba(0,0,0,.35))}
+.hero-glow{position:absolute;right:20%;top:16%;width:330px;height:330px;border-radius:50%;background:rgba(212,175,55,.07);filter:blur(55px)}
+.home-page .hero-inner{display:block;width:min(1180px,92%);padding:105px 0 80px;position:relative;z-index:3}
+.hero-copy{width:min(650px,60%);position:relative}
+.hero-rule{width:52px;height:3px;background:var(--gold);margin-bottom:20px}
+.hero-kicker{display:block;font:600 clamp(54px,7vw,94px)/.92 var(--serif);letter-spacing:.05em;color:#f6f1eb}
+.hero-title-sub{margin-top:14px;color:var(--gold);font-size:17px;letter-spacing:.34em;font-weight:700}
+.home-page .hero h1{font:500 clamp(31px,3.2vw,46px)/1.15 var(--serif);margin:42px 0 16px;color:#fff;letter-spacing:-.01em}
+.home-page .hero p{max-width:570px;color:#d9d1c9;font-size:15px;line-height:1.7;margin:0}
+.hero-search{display:grid;grid-template-columns:1fr 54px;width:min(650px,100%);height:58px;margin-top:30px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(10,9,8,.55);overflow:hidden;box-shadow:0 14px 35px rgba(0,0,0,.25)}
+.hero-search .search-input{height:100%;border:0;background:transparent;padding:0 22px;color:#fff}
+.hero-search .search-input::placeholder{color:#bdb5ad}
+.hero-search .search-input:focus{outline:none}
+.search-submit{width:42px;height:42px;margin:7px;border:0;border-radius:50%;background:var(--gold);color:#18130f;font-size:26px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:transform .2s}
+.search-submit:hover{transform:translateX(2px)}
+.home-page .hero-actions{margin-top:28px;gap:16px}
+.home-page .hero-actions .btn{min-height:54px;border-radius:999px;padding:0 24px;font-size:12px}
+.home-page .hero-actions .btn span{font-size:18px;margin-left:12px}
+.home-page .btn-gold{box-shadow:0 10px 25px rgba(212,175,55,.16)}
+.home-page .btn-outline{border-color:rgba(255,255,255,.7);background:rgba(0,0,0,.1)}
+.home-page .quick-filters{margin-top:18px;gap:7px}
+.home-page .quick-filter{min-height:34px;padding:6px 11px;background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14);color:#ddd5cd;font-size:10px}
+.home-page .quick-filter:hover,.home-page .quick-filter:focus-visible{background:rgba(212,175,55,.13);border-color:rgba(212,175,55,.6);color:#fff}
+.home-page .metrics{position:relative;z-index:5}
+@media(max-width:1000px){
+  .home-page .hero{min-height:760px}
+  .hero-copy{width:66%}
+  .hero-backdrop img{width:70vw;right:-8%;opacity:.9}
+}
+@media(max-width:720px){
+  .home-page .site-header{position:absolute}
+  .home-page .topbar{min-height:82px}
+  .home-page .brand-logo{width:155px;height:62px}
+  .home-page .main-nav a{padding:10px 0}
+  .home-page .hero{min-height:760px;padding-top:80px}
+  .home-page .hero:before{background:linear-gradient(180deg,#090807 0%,rgba(9,8,7,.86) 48%,rgba(9,8,7,.58) 100%)}
+  .hero-backdrop img{width:92vw;height:58%;right:-10%;bottom:0;opacity:.7}
+  .hero-copy{width:100%}
+  .hero-kicker{font-size:55px}
+  .hero-title-sub{font-size:13px;letter-spacing:.25em}
+  .home-page .hero h1{font-size:31px;margin-top:28px}
+  .home-page .hero p{font-size:13px}
+  .hero-search{height:54px;margin-top:24px}
+  .home-page .hero-actions{gap:9px}
+  .home-page .hero-actions .btn{flex:1 1 210px}
+  .home-page .quick-filters{overflow:auto;flex-wrap:nowrap;padding-bottom:4px;scrollbar-width:none}
+  .home-page .quick-filters::-webkit-scrollbar{display:none}
+  .home-page .quick-filter{flex:0 0 auto}
+}
+@media(max-width:480px){
+  .home-page .hero{min-height:730px}
+  .home-page .hero-inner{padding:105px 0 45px}
+  .hero-rule{margin-bottom:15px}
+  .hero-kicker{font-size:47px}
+  .hero-title-sub{font-size:11px}
+  .home-page .hero h1{font-size:28px;line-height:1.18}
+  .home-page .hero-actions .btn{flex-basis:100%}
+  .hero-backdrop img{width:110vw;height:52%;right:-20%;opacity:.58}
+}
