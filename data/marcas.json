@@ -1,10 +1,10 @@
 {
   "version": "8.0.0",
-  "updated": "2026-09-25T08:20:42Z",
+  "updated": "2026-10-02T15:03:18Z",
   "source": "Pipateka + Fumeurs de Pipe Tabacothèque + imágenes oficiales Mac Baren",
   "source_scope": "Marcas derivadas de las mezclas realmente cargadas en el índice local; no representa disponibilidad comercial.",
   "total_marcas_cargadas": 126,
-  "total_blends_cargados": 2392,
+  "total_blends_cargados": 2394,
   "total_marcas_referencia": 667,
   "total_blends_referencia": 8582,
   "marcas": [
@@ -135,7 +135,7 @@
     },
     {
       "marca": "Davidoff",
-      "blends": 2,
+      "blends": 3,
       "resenas": 0
     },
     {
@@ -240,7 +240,7 @@
     },
     {
       "marca": "Gladora",
-      "blends": 1,
+      "blends": 2,
       "resenas": 0
     },
     {
